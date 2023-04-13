@@ -302,11 +302,20 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
         private static void CadastrarRevista(List<Revista> listaRevistas, List<Caixa> listaCaixas)
         {
-            Console.Clear();
-            Console.Write("\n   Digite o titulo da revista que deseja cadastrar: ");
-            string titulo = Console.ReadLine();
-            Console.Write("\n   Digite a coleção dessa revista: ");
-            string tipoColecao = Console.ReadLine();
+            string titulo = "";
+            while (!ValidarString(titulo))
+            {
+                Console.Clear();
+                Console.Write("\n   Digite o titulo da revista que deseja cadastrar: ");
+                titulo = Console.ReadLine();
+            }
+            string tipoColecao = "";
+            while (!ValidarString(tipoColecao))
+            {
+                Console.Clear();
+                Console.Write("\n   Digite a coleção dessa revista: ");
+                tipoColecao = Console.ReadLine();
+            }
             Console.Write("\n   Digite numero da edição dessa revista: ");
             int numeroDaEdicao = int.Parse(Console.ReadLine());
             Console.Write("\n   Digite o ano dessa revista: ");
@@ -342,10 +351,20 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             {
                 if (revistaEditada.id == id)
                 {
-                    Console.Write("\n   Digite o titulo da revista que deseja editar: ");
-                    string titulo = Console.ReadLine();
-                    Console.Write("\n   Digite a coleção dessa revista: ");
-                    string tipoColecao = Console.ReadLine();
+                    string titulo = "";
+                    while (!ValidarString(titulo))
+                    {
+                        Console.Clear();
+                        Console.Write("\n   Digite o titulo da revista que deseja cadastrar: ");
+                        titulo = Console.ReadLine();
+                    }
+                    string tipoColecao = "";
+                    while (!ValidarString(tipoColecao))
+                    {
+                        Console.Clear();
+                        Console.Write("\n   Digite a coleção dessa revista: ");
+                        tipoColecao = Console.ReadLine();
+                    }
                     Console.Write("\n   Digite numero da edição dessa revista: ");
                     int numeroDaEdicao = int.Parse(Console.ReadLine());
                     Console.Write("\n   Digite o ano dessa revista: ");
@@ -416,15 +435,34 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
         private static void CadastrarAmigo(List<Amigo> listaAmigos)
         {
-            Console.Clear();
-            Console.Write("\n   Digite o nome do amigo que deseja cadastrar: ");
-            string nome = Console.ReadLine();
-            Console.Write("\n   Digite o nome do responsável desse amigo: ");
-            string nomeResponsavel = Console.ReadLine();
-            Console.Write("\n   Digite o endereço desse amigo: ");
-            string endereco = Console.ReadLine();
-            Console.Write("\n   Digite o telefone desse amigo: ");
-            string numeroParaContato = Console.ReadLine();
+            string nome = "";
+            while (!ValidarString(nome))
+            {
+                Console.Clear();
+                Console.Write("\n   Digite o nome do amigo que deseja cadastrar: ");
+                nome = Console.ReadLine();
+            }
+            string nomeResponsavel = "";
+            while (!ValidarString(nomeResponsavel))
+            {
+                Console.Clear();
+                Console.Write("\n   Digite o nome do responsável desse amigo: ");
+                nomeResponsavel = Console.ReadLine();
+            }
+            string endereco = "";
+            while (!ValidarString(endereco))
+            {
+                Console.Clear();
+                Console.Write("\n   Digite o endereço desse amigo: ");
+                endereco = Console.ReadLine();
+            }
+            string numeroParaContato = "";
+            while (!ValidarString(numeroParaContato))
+            {
+                Console.Clear();
+                Console.Write("\n   Digite o telefone desse amigo: ");
+                nome = Console.ReadLine();
+            }
 
             Amigo amigo = new Amigo(nome, nomeResponsavel, endereco, numeroParaContato, false);
 
@@ -447,14 +485,34 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             {
                 if (amigoEditado.id == id)
                 {
-                    Console.Write("\n   Digite o nome do amigo que deseja editar: ");
-                    string nome = Console.ReadLine();
-                    Console.Write("\n   Digite o nome do responsável desse amigo: ");
-                    string nomeResponsavel = Console.ReadLine();
-                    Console.Write("\n   Digite o endereço desse amigo: ");
-                    string endereco = Console.ReadLine();
-                    Console.Write("\n   Digite o telefone desse amigo: ");
-                    string numeroParaContato = Console.ReadLine();
+                    string nome = "";
+                    while (!ValidarString(nome))
+                    {
+                        Console.Clear();
+                        Console.Write("\n   Digite o nome do amigo que deseja cadastrar: ");
+                        nome = Console.ReadLine();
+                    }
+                    string nomeResponsavel = "";
+                    while (!ValidarString(nomeResponsavel))
+                    {
+                        Console.Clear();
+                        Console.Write("\n   Digite o nome do responsável desse amigo: ");
+                        nomeResponsavel = Console.ReadLine();
+                    }
+                    string endereco = "";
+                    while (!ValidarString(endereco))
+                    {
+                        Console.Clear();
+                        Console.Write("\n   Digite o endereço desse amigo: ");
+                        endereco = Console.ReadLine();
+                    }
+                    string numeroParaContato = "";
+                    while (!ValidarString(numeroParaContato))
+                    {
+                        Console.Clear();
+                        Console.Write("\n   Digite o telefone desse amigo: ");
+                        nome = Console.ReadLine();
+                    }
 
                     amigoEditado.EditarAmigo(nome, nomeResponsavel, endereco, numeroParaContato, amigoEditado.possuiEmprestimoEmAberto);
 
