@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
+using System.Text.RegularExpressions;
 
 namespace ClubeDaLeituraDaCamile.ConsoleApp
 {
@@ -14,6 +16,8 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             List<Caixa> listaCaixas = new List<Caixa>();
             List<Revista> listaRevistas = new List<Revista>();
             List<Amigo> listaAmigos = new List<Amigo>();
+
+            PopularCamposParaTeste(listaAmigos, listaRevistas, listaCaixas);
 
             do
             {
@@ -51,7 +55,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         EditarRevista(listaRevistas, listaCaixas);
                         break;
                     case "8":
-                        ExcluirRevista(listaRevistas, listaCaixas);
+                        ExcluirRevista(listaRevistas);
                         break;
                     case "9":
                         CadastrarAmigo(listaAmigos);
@@ -69,6 +73,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         break;
                     case "13":
                         RealizarEmprestimo(listaAmigos,listaRevistas,listaEmprestimos);
+                        continuar = true;
                         break;
                     case "14":
                         Console.Clear();
@@ -82,9 +87,11 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         break;
                     case "16":
                         EditarEmprestimo(listaAmigos, listaRevistas, listaEmprestimos);
+                        continuar = true;
                         break;
                     case "17":
                         ExcluirEmprestimo(listaEmprestimos);
+                        continuar = true;
                         break;
                     case "18":
                         DevolverRevista(listaAmigos, listaRevistas, listaEmprestimos);
@@ -98,12 +105,15 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
             } while (continuar);
         }
+
         private static void DevolverRevista(List<Amigo> listaAmigos, List<Revista> listaRevistas, List<Emprestimo> listaEmprestimos)
         {
             Console.Clear();
             MostrarListaEmprestimosEmAberto(listaEmprestimos);
             Console.Write("\n   Digite o id do emprestimo que deseja encerrar: ");
             int id = Convert.ToInt32(Console.ReadLine());
+            Revista revistaEscolhida = null;
+            revistaEscolhida.disponivel = " DISPONÍVEL ";
 
             foreach (Emprestimo emprestimoEnd in listaEmprestimos)
             {
@@ -116,7 +126,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                     break;
                 }
             }
-
+             
             Console.Clear();
             ExibirMensagem("\n   Revista devolvida com Sucesso! ", ConsoleColor.DarkGreen);
             Console.WriteLine();
@@ -177,7 +187,9 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
             foreach (Emprestimo print in listaEmprestimos)
             {
-                if (print != null)
+                DateTime dataAbertura = DateTime.ParseExact(print.dataInicial, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+                if (dataAbertura.Month == DateTime.Now.Month && print != null)
                 {
                     Console.WriteLine("{0,-5}|{1,-25}|{2,-25}|{3,-15}|{4,-25}", print.id, print.nomeAmigo, print.tituloRevista, print.dataInicial, print.devolucao);
                 }
@@ -188,23 +200,57 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         {
             Console.Clear();
             MostrarListaAmigos(listaAmigos);
-            Console.Write("\n   Digite o id do Amigo que deseja realizar um empréstimo: ");
-            int idAmigoEscolhido = int.Parse(Console.ReadLine());
+            int idAmigoEscolhido;
+            Amigo amigoEscolhido = null;
+            while (true)
+            {
+                Console.Write("\n   Digite o id do Amigo que deseja realizar um empréstimo: ");
+                idAmigoEscolhido = Convert.ToInt32(Console.ReadLine());
 
-            Amigo amigoEscolhido = SelecionarAmigoPorID(listaAmigos, idAmigoEscolhido);
+                amigoEscolhido = SelecionarAmigoPorID(listaAmigos, idAmigoEscolhido);
+
+                if (amigoEscolhido != null)
+                {
+                    break;
+                }
+                else
+                {
+                    ExibirMensagem("\n   Amigo não encontrado!", ConsoleColor.DarkRed);
+                    Console.ReadLine();
+                    continue;
+                }
+            }
 
             string nomeAmigo = amigoEscolhido.nome;
 
             MostrarListaRevistas(listaRevistas);
-            Console.Write("\n   Digite o id da Revista que deseja emprestar: ");
-            int idRevistaEscolhida = int.Parse(Console.ReadLine());
+            int idRevistaEscolhida;
+            Revista revistaEscolhida = null;
 
-            Revista revistaEscolhida = SelecionarRevistaPorID(listaRevistas, idRevistaEscolhida);
+            while (true)
+            {
+                Console.Write("\n   Digite o id da Revista que deseja emprestada (seu status tem que ser DISPONÍVEL): ");
+                idRevistaEscolhida = Convert.ToInt32(Console.ReadLine());
+
+                revistaEscolhida = SelecionarRevistaPorID(listaRevistas, idRevistaEscolhida);
+
+                if (revistaEscolhida != null && revistaEscolhida.disponivel == " DISPONÍVEL ")
+                {
+                    break;
+                }
+                else
+                {
+                    ExibirMensagem("\n   Revista não encontrada! ", ConsoleColor.DarkRed);
+                    Console.ReadLine();
+                    continue;
+                }
+            }
 
             string tituloRevista = revistaEscolhida.titulo;
 
-            Console.Write("\n   Digite a data em que foi realizado o empréstimo: ");
-            int dataInicial = int.Parse(Console.ReadLine()); //----------------------------------------------------------------------------- verificacao formato data ---------------------------------
+            revistaEscolhida.disponivel = " INISPONÍVEL ";
+
+            string dataInicial = RegistrarDataInicial();
 
             Emprestimo emprestimo = new Emprestimo(nomeAmigo, tituloRevista, dataInicial);
 
@@ -220,8 +266,26 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         {
             Console.Clear();
             MostrarListaEmprestimosEmAberto(listaEmprestimos);
-            Console.Write("\n   Digite o id do emprestimo que deseja alterar: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+            int id;
+            Emprestimo emprestimoEscolhido = null;
+            while (true)
+            {
+                Console.Write("\n   Digite o id do emprestimo que deseja alterar: ");
+                id = Convert.ToInt32(Console.ReadLine());
+
+                emprestimoEscolhido = SelecionarEmprestimoPorID(listaEmprestimos, id);
+
+                if (emprestimoEscolhido != null)
+                {
+                    break;
+                }
+                else
+                {
+                    ExibirMensagem("\n   Empréstimo não encontrado!", ConsoleColor.DarkRed);
+                    Console.ReadLine();
+                    continue;
+                }
+            }
 
             foreach (Emprestimo emprestimoEdit in listaEmprestimos)
             {
@@ -229,23 +293,57 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                 {
                     Console.Clear();
                     MostrarListaAmigos(listaAmigos);
-                    Console.Write("\n   Digite o id do Amigo que deseja realizar um empréstimo: ");
-                    int idAmigoEscolhido = int.Parse(Console.ReadLine());
+                    int idAmigoEscolhido;
+                    Amigo amigoEscolhido = null;
+                    while (true)
+                    {
+                        Console.Write("\n   Digite o id do Amigo que deseja realizar um empréstimo: ");
+                        idAmigoEscolhido = Convert.ToInt32(Console.ReadLine());
 
-                    Amigo amigoEscolhido = SelecionarAmigoPorID(listaAmigos, idAmigoEscolhido);
+                        amigoEscolhido = SelecionarAmigoPorID(listaAmigos, idAmigoEscolhido);
+
+                        if (amigoEscolhido != null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            ExibirMensagem("\n   Amigo não encontrado!", ConsoleColor.DarkRed);
+                            Console.ReadLine();
+                            continue;
+                        }
+                    }
 
                     string nomeAmigo = amigoEscolhido.nome;
 
                     MostrarListaRevistas(listaRevistas);
-                    Console.Write("\n   Digite o id da Revista que deseja emprestar: ");
-                    int idRevistaEscolhida = int.Parse(Console.ReadLine());
+                    int idRevistaEscolhida;
+                    Revista revistaEscolhida = null;
 
-                    Revista revistaEscolhida = SelecionarRevistaPorID(listaRevistas, idRevistaEscolhida);
+                    while (true)
+                    {
+                        Console.Write("\n   Digite o id da Revista que deseja emprestar: ");
+                        idRevistaEscolhida = Convert.ToInt32(Console.ReadLine());
+
+                        revistaEscolhida = SelecionarRevistaPorID(listaRevistas, idRevistaEscolhida);
+
+                        if (amigoEscolhido != null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            ExibirMensagem("\n   Revista não encontrada!", ConsoleColor.DarkRed);
+                            Console.ReadLine();
+                            continue;
+                        }
+                    }
 
                     string tituloRevista = revistaEscolhida.titulo;
 
-                    Console.Write("\n   Digite a data em que foi realizado o empréstimo: ");
-                    int dataInicial = int.Parse(Console.ReadLine());
+                    string revistaDisponivel = revistaEscolhida.disponivel;
+
+                    string dataInicial = RegistrarDataInicial();
 
                     emprestimoEdit.EditarEmprestimo(nomeAmigo, tituloRevista, dataInicial);
 
@@ -262,8 +360,26 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         {
             Console.Clear();
             MostrarListaEmprestimosEmAberto(listaEmprestimos);
-            Console.Write("\n   Digite o id do emprestimo que deseja alterar: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+            int id;
+            Emprestimo emprestimoEscolhido = null;
+            while (true)
+            {
+                Console.Write("\n   Digite o id do emprestimo que deseja excluír: ");
+                id = Convert.ToInt32(Console.ReadLine());
+
+                emprestimoEscolhido = SelecionarEmprestimoPorID(listaEmprestimos, id);
+
+                if (emprestimoEscolhido != null)
+                {
+                    break;
+                }
+                else
+                {
+                    ExibirMensagem("\n   Empréstimo não encontrado!", ConsoleColor.DarkRed);
+                    Console.ReadLine();
+                    continue;
+                }
+            }
 
             foreach (Emprestimo emprestimoRemove in listaEmprestimos)
             {
@@ -274,6 +390,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                     break;
                 }
             }
+
             Console.Clear();
             MostrarListaEmprestimosEmAberto(listaEmprestimos);
             ExibirMensagem("\n   Empréstimo excluído com Sucesso! ", ConsoleColor.DarkGreen);
@@ -287,7 +404,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             Console.WriteLine("                               Lista de Revistas                                             ");
             Console.WriteLine("_____________________________________________________________________________________________");
             Console.WriteLine();
-            Console.WriteLine("{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}", "ID ", "  TÍTULO ", "  COLEÇÃO ", "  EDIÇÃO ", "  ANO ", "  CAIXA ");
+            Console.WriteLine("{0,-5}|{1,-14}|{2,-14}|{3,-14}|{4,-12}|{5,-14}|{6,-14}", "ID ", "  TÍTULO ", "  COLEÇÃO ", "  EDIÇÃO ", "    ANO ", "  CAIXA ", "  STATUS ");
             Console.WriteLine("_____________________________________________________________________________________________");
             Console.WriteLine();
 
@@ -295,7 +412,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             {
                 if (print != null)
                 {
-                    Console.WriteLine("{0,-5}|{1,-15}|{2,-15}|{3,-15}|{4,-15}|{5,-15}", print.id, print.titulo, print.tipoColecao, print.numeroDaEdicao, print.ano, print.etiqueta);
+                    Console.WriteLine("{0,-5}|{1,-14}|{2,-14}|{3,-14}|{4,-12}|{5,-14}|{6,-14}", print.id, print.titulo, print.tipoColecao, print.numeroDaEdicao, print.ano, print.etiqueta, print.disponivel);
                 }
             }
         }
@@ -303,32 +420,26 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         private static void CadastrarRevista(List<Revista> listaRevistas, List<Caixa> listaCaixas)
         {
             string titulo = "";
-            while (!ValidarString(titulo))
+            while (!ValidarVazio(titulo))
             {
                 Console.Clear();
                 Console.Write("\n   Digite o titulo da revista que deseja cadastrar: ");
                 titulo = Console.ReadLine();
             }
             string tipoColecao = "";
-            while (!ValidarString(tipoColecao))
+            while (!ValidarVazio(tipoColecao))
             {
                 Console.Clear();
                 Console.Write("\n   Digite a coleção dessa revista: ");
                 tipoColecao = Console.ReadLine();
             }
-            Console.Write("\n   Digite numero da edição dessa revista: ");
-            int numeroDaEdicao = int.Parse(Console.ReadLine());
-            Console.Write("\n   Digite o ano dessa revista: ");
-            int ano = int.Parse(Console.ReadLine());
+            int numeroDaEdicao = LerApenasNumero();
+            int ano = ObterAnoFormatoCorreto();
 
             Console.WriteLine();
             MostrarListaCaixa(listaCaixas);
-            Console.Write("\n   Digite o id da caixa que deseja colocar essa revista: ");
-            int idcaixaEscolhida = int.Parse(Console.ReadLine());
-            
-            Caixa caixaEscolhida = SelecionarCaixaPorID(listaCaixas, idcaixaEscolhida);
 
-            string etiqueta = caixaEscolhida.etiqueta;
+            string etiqueta = EncontrarEtiquetaCaixaPeloId(listaCaixas);
 
             Revista revista = new Revista(titulo, tipoColecao, numeroDaEdicao, ano, etiqueta);
 
@@ -344,41 +455,50 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         {
             Console.Clear();
             MostrarListaRevistas(listaRevistas);
-            Console.Write("\n   Digite o id da revista que deseja alterar: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+            int id;
+            while (true)
+            {
+                Console.Write("\n   Digite o id da revista que deseja alterar: ");
+                id = Convert.ToInt32(Console.ReadLine());
+                Revista revistaEscolhida = SelecionarRevistaPorID(listaRevistas, id);
+
+                if (revistaEscolhida != null)
+                {
+                    break;
+                }
+                else
+                {
+                    ExibirMensagem("\n   Revista não encontrada!", ConsoleColor.DarkRed);
+                    Console.ReadLine();
+                    continue;
+                }
+            }
+            
 
             foreach (Revista revistaEditada in listaRevistas)
             {
                 if (revistaEditada.id == id)
                 {
                     string titulo = "";
-                    while (!ValidarString(titulo))
+                    while (!ValidarVazio(titulo))
                     {
                         Console.Clear();
                         Console.Write("\n   Digite o titulo da revista que deseja cadastrar: ");
                         titulo = Console.ReadLine();
                     }
                     string tipoColecao = "";
-                    while (!ValidarString(tipoColecao))
+                    while (!ValidarVazio(tipoColecao))
                     {
                         Console.Clear();
                         Console.Write("\n   Digite a coleção dessa revista: ");
                         tipoColecao = Console.ReadLine();
                     }
-                    Console.Write("\n   Digite numero da edição dessa revista: ");
-                    int numeroDaEdicao = int.Parse(Console.ReadLine());
-                    Console.Write("\n   Digite o ano dessa revista: ");
-                    int ano = int.Parse(Console.ReadLine());
+                    int numeroDaEdicao = LerApenasNumero();
+                    int ano = ObterAnoFormatoCorreto();
 
-                    Console.Write("\n   Digite o id da caixa que deseja colocar essa revista: ");
-                    MostrarListaCaixa(listaCaixas);
-                    int idcaixaEscolhida = int.Parse(Console.ReadLine());
+                    string etiqueta = EncontrarEtiquetaCaixaPeloId(listaCaixas);
 
-                    Caixa caixaEscolhida = SelecionarCaixaPorID(listaCaixas, idcaixaEscolhida);
-
-                    string etiqueta = caixaEscolhida.etiqueta;
-
-                    revistaEditada.EditarRevista(titulo, tipoColecao, numeroDaEdicao, ano, etiqueta);
+                    revistaEditada.EditarRevista(titulo, tipoColecao, numeroDaEdicao, ano, etiqueta, revistaEditada.disponivel);
 
                     break;
                 }
@@ -390,13 +510,28 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
         }
 
-        public static void ExcluirRevista(List<Revista> listaRevistas, List<Caixa> listaCaixas)
+        public static void ExcluirRevista(List<Revista> listaRevistas)
         {
             Console.Clear();
             MostrarListaRevistas(listaRevistas);
+            int id;
+            while (true)
+            {
+                Console.Write("\n   Digite o id da revista que deseja exclir: ");
+                id = Convert.ToInt32(Console.ReadLine());
+                Revista revistaEscolhida = SelecionarRevistaPorID(listaRevistas, id);
 
-            Console.Write("\n   Digite o id da revista que deseja exclir: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+                if (revistaEscolhida != null)
+                {
+                    break;
+                }
+                else
+                {
+                    ExibirMensagem("\n   Revista não encontrada!", ConsoleColor.DarkRed);
+                    Console.ReadLine();
+                    continue;
+                }
+            }
 
             foreach (Revista revistaExcluída in listaRevistas)
             {
@@ -436,35 +571,35 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         private static void CadastrarAmigo(List<Amigo> listaAmigos)
         {
             string nome = "";
-            while (!ValidarString(nome))
+            while (!ValidarVazio(nome))
             {
                 Console.Clear();
                 Console.Write("\n   Digite o nome do amigo que deseja cadastrar: ");
                 nome = Console.ReadLine();
             }
             string nomeResponsavel = "";
-            while (!ValidarString(nomeResponsavel))
+            while (!ValidarVazio(nomeResponsavel))
             {
                 Console.Clear();
                 Console.Write("\n   Digite o nome do responsável desse amigo: ");
                 nomeResponsavel = Console.ReadLine();
             }
             string endereco = "";
-            while (!ValidarString(endereco))
+            while (!ValidarVazio(endereco))
             {
                 Console.Clear();
                 Console.Write("\n   Digite o endereço desse amigo: ");
                 endereco = Console.ReadLine();
             }
             string numeroParaContato = "";
-            while (!ValidarString(numeroParaContato))
+            while (!ValidarVazio(numeroParaContato))
             {
                 Console.Clear();
                 Console.Write("\n   Digite o telefone desse amigo: ");
-                nome = Console.ReadLine();
+                numeroParaContato = Console.ReadLine();
             }
 
-            Amigo amigo = new Amigo(nome, nomeResponsavel, endereco, numeroParaContato, false);
+            Amigo amigo = new Amigo(nome, nomeResponsavel, endereco, numeroParaContato);
 
             listaAmigos.Add(amigo);
             Console.Clear();
@@ -477,44 +612,59 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         {
             Console.Clear();
             MostrarListaAmigos(listaAmigos);
+            int id;
+            while (true)
+            {
+                Console.Write("\n   Digite o id do amigo que deseja alterar: ");
+                id = Convert.ToInt32(Console.ReadLine());
 
-            Console.Write("\n   Digite o id do amigo que deseja alterar: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+                Amigo amigoEscolhido = SelecionarAmigoPorID(listaAmigos, id);
 
+                if (amigoEscolhido != null)
+                {
+                    break;
+                }
+                else
+                {
+                    ExibirMensagem("\n   Amigo não encontrado!", ConsoleColor.DarkRed);
+                    Console.ReadLine();
+                    continue;
+                }
+            }
             foreach (Amigo amigoEditado in listaAmigos)
             {
                 if (amigoEditado.id == id)
                 {
                     string nome = "";
-                    while (!ValidarString(nome))
+                    while (!ValidarVazio(nome))
                     {
                         Console.Clear();
                         Console.Write("\n   Digite o nome do amigo que deseja cadastrar: ");
                         nome = Console.ReadLine();
                     }
                     string nomeResponsavel = "";
-                    while (!ValidarString(nomeResponsavel))
+                    while (!ValidarVazio(nomeResponsavel))
                     {
                         Console.Clear();
                         Console.Write("\n   Digite o nome do responsável desse amigo: ");
                         nomeResponsavel = Console.ReadLine();
                     }
                     string endereco = "";
-                    while (!ValidarString(endereco))
+                    while (!ValidarVazio(endereco))
                     {
                         Console.Clear();
                         Console.Write("\n   Digite o endereço desse amigo: ");
                         endereco = Console.ReadLine();
                     }
                     string numeroParaContato = "";
-                    while (!ValidarString(numeroParaContato))
+                    while (!ValidarVazio(numeroParaContato))
                     {
                         Console.Clear();
                         Console.Write("\n   Digite o telefone desse amigo: ");
                         nome = Console.ReadLine();
                     }
 
-                    amigoEditado.EditarAmigo(nome, nomeResponsavel, endereco, numeroParaContato, amigoEditado.possuiEmprestimoEmAberto);
+                    amigoEditado.EditarAmigo(nome, nomeResponsavel, endereco, numeroParaContato, amigoEditado.possuiEmprestimoEmAberto); 
 
                     break;
                 }
@@ -530,9 +680,25 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         {
             Console.Clear();
             MostrarListaAmigos(listaAmigos);
+            int id;
+            while(true)
+            {
+                Console.Write("\n   Digite o id do amigo que deseja exclir: ");
+                id = Convert.ToInt32(Console.ReadLine());
 
-            Console.Write("\n   Digite o id do amigo que deseja exclir: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+                Amigo amigoEscolhido = SelecionarAmigoPorID(listaAmigos, id);
+
+                if (amigoEscolhido != null)
+                {
+                    break;
+                }
+                else
+                {
+                    ExibirMensagem("\n   Amigo não encontrado!", ConsoleColor.DarkRed);
+                    Console.ReadLine();
+                    continue;
+                }
+            }
 
             foreach (Amigo amigoExcluido in listaAmigos)
             {
@@ -573,14 +739,14 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         {
             Console.Clear();
             string cor = "";
-            while (!ValidarString(cor))
+            while (!ValidarVazio(cor))
             {
                 Console.Clear();
                 Console.Write("\n   Digite a cor da caixa que deseja cadastrar: ");
                 cor = Console.ReadLine();
             }
             string etiqueta = "";
-            while (!ValidarString(etiqueta))
+            while (!ValidarVazio(etiqueta))
             {
                 Console.Clear();
                 Console.Write("\n   Digite a etiqueta para essa caixa: ");
@@ -597,24 +763,41 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
         private static void EditararCaixa(List<Caixa> listaCaixas)
         {
+            int id; 
             Console.Clear();
             MostrarListaCaixa(listaCaixas);
-            Console.Write("\n   Digite o id da caixa que deseja alterar: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+            while (true)
+            {
+                Console.Write("\n   Digite o id da caixa que deseja alterar: ");
+                id = Convert.ToInt32(Console.ReadLine());
+
+                Caixa caixaEscolhida = SelecionarCaixaPorID(listaCaixas, id);
+
+                if (caixaEscolhida != null)
+                {
+                    break;
+                }
+                else
+                {
+                    ExibirMensagem("\n   Caixa não encontrada!", ConsoleColor.DarkRed);
+                    Console.ReadLine();
+                    continue;
+                }
+            }
 
             foreach (Caixa caixaEdit in listaCaixas)
             {
                 if (caixaEdit.id == id)
                 {
                     string cor = "";
-                    while (!ValidarString(cor))
+                    while (!ValidarVazio(cor))
                     {
                         Console.Clear();
                         Console.Write("\n   Digite a cor da caixa que deseja: ");
                         cor = Console.ReadLine();
                     }
                     string etiqueta = "";
-                    while (!ValidarString(etiqueta))
+                    while (!ValidarVazio(etiqueta))
                     {
                         Console.Clear();
                         Console.Write("\n   Digite a etiqueta para essa caixa: ");
@@ -637,26 +820,23 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
             Console.Clear();
             MostrarListaCaixa(listaCaixas);
-
-            while (true){
+            while (true)
+            {
                 Console.Write("\n   Digite o id da caixa que deseja descartar: ");
                 id = Convert.ToInt32(Console.ReadLine());
-                Caixa caixa = null;
-                int idcaixa = caixa.id;
-                if (id < 1 || id > listaCaixas.Count + 1)
+
+                Caixa caixaEscolhida = SelecionarCaixaPorID(listaCaixas, id);
+
+                if (caixaEscolhida != null)
                 {
-                    ExibirMensagem("\n   ID inexistente. Digite um ID válido. ", ConsoleColor.DarkRed);
+                    break;
+                }
+                else
+                {
+                    ExibirMensagem("\n   Caixa não encontrada!", ConsoleColor.DarkRed);
                     Console.ReadLine();
                     continue;
                 }
-               // if (listaCaixas.FindIndex(e => e.caixa.id == id == -1))
-                //{
-                //    ExibirMensagem("\n   ID inexistente. Digite um ID válido. ", ConsoleColor.DarkRed);
-                //    Console.ReadLine();
-                //    continue;
-                //}
-                else
-                    break;
             }
 
             foreach (Caixa caixaRemove in listaCaixas)
@@ -674,67 +854,159 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             Console.ReadLine();
         }
 
-        private static Emprestimo SelecionarEmprestimoPorID(List<Emprestimo> listaEmprestimos, int idEmprestimoEscolhido)
+        private static string EncontrarEtiquetaCaixaPeloId(List<Caixa> listaCaixas)
         {
-            Emprestimo emprestimo = null;
-
-            foreach (Emprestimo emprestimoEscolhido in listaEmprestimos)
+            int idcaixaEscolhida;
+            string etiqueta = "";
+            while (true)
             {
-                if (emprestimoEscolhido.id == idEmprestimoEscolhido)
+                Console.Write("\n   Digite o id da caixa que deseja colocar essa revista: ");
+                idcaixaEscolhida = int.Parse(Console.ReadLine());
+
+                Caixa caixaEscolhida = SelecionarCaixaPorID (listaCaixas, idcaixaEscolhida);
+
+                if (caixaEscolhida != null)
                 {
-                    emprestimo = emprestimoEscolhido;
+                    etiqueta = caixaEscolhida.etiqueta;
                     break;
                 }
-            }
-            return emprestimo;
-        }
-
-        private static Caixa SelecionarCaixaPorID(List<Caixa> listaCaixas, int idcaixaEscolhida)
-        {
-            Caixa caixa = null;
-
-            foreach (Caixa caixaEscolhida in listaCaixas)
-            {
-                if (caixaEscolhida.id == idcaixaEscolhida)
+                else
                 {
-                    caixa = caixaEscolhida;
-                    break;
+                    ExibirMensagem("\n   Caixa não encontrada!", ConsoleColor.DarkRed);
+                    Console.ReadLine();
+                    continue;
                 }
             }
-            return caixa;
+
+            return etiqueta;
         }
 
-        private static Amigo SelecionarAmigoPorID(List<Amigo> listaAmigos, int idAmigoEscolhido)
+        private static Emprestimo SelecionarEmprestimoPorID(List<Emprestimo> listaEmprestimos, int id)
         {
-            Amigo amigo = null;
+            return listaEmprestimos.Find(e => e.id == id);
+        }
 
-            foreach (Amigo amigoEscolhido in listaAmigos)
+        private static Amigo SelecionarAmigoPorID(List<Amigo> listaAmigos, int id)
+        {
+            return listaAmigos.Find(amigo => amigo.id == id);
+        }
+
+        private static Revista SelecionarRevistaPorID(List<Revista> listaRevistas, int id)
+        {
+            return listaRevistas.Find(revista => revista.id == id);
+        }
+
+        private static Caixa SelecionarCaixaPorID(List<Caixa> listaCaixas, int id)
+        {
+            return listaCaixas.Find(caixa => caixa.id == id);
+        }
+
+        private static int ObterAnoFormatoCorreto()
+        {
+            int ano;
+
+            while (true)
             {
-                if (amigoEscolhido.id == idAmigoEscolhido)
+                Console.Write("\n   Digite o ano dessa revista: ");
+                string anoInput = Console.ReadLine();
+
+                if (int.TryParse(anoInput, out ano))
                 {
-                    amigo = amigoEscolhido;
-                    break;
+                    if (ano >= 1700 && ano <= 2023)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        ExibirMensagem("\n   O ano deve estar no formato 'aaaa', e ser válido. Tente novamente. ", ConsoleColor.DarkRed);
+                        continue;
+                    }
+                }
+                else
+                {
+                    ExibirMensagem("\n   O ano deve estar no formato 'aaaa', e conter apenas numeros. Tente novamente. ", ConsoleColor.DarkRed);
+                    continue;
                 }
             }
-            return amigo;
+
+            return ano;
         }
 
-        private static Revista SelecionarRevistaPorID(List<Revista> listaRevistas, int idRevistaEscolhida)
+        private static int LerApenasNumero()
         {
-            Revista revista = null;
-
-            foreach (Revista revistaEscolhida in listaRevistas)
+            int numeroDaEdicao = 0;
+            while (true)
             {
-                if (revistaEscolhida.id == idRevistaEscolhida)
+                Console.Write("\n   Digite numero da edição dessa revista: ");
+                string numeroInput = Console.ReadLine();
+
+                if (int.TryParse(numeroInput, out numeroDaEdicao))
                 {
-                    revista = revistaEscolhida;
-                    break;
+                    // Verifica se a entrada do usuário consiste apenas em dígitos numéricos
+                    if (numeroInput.All(char.IsDigit))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        ExibirMensagem("\n   O numero da edição deve conter apenas numeros. Tente novamente. ", ConsoleColor.DarkRed);
+                        continue;
+                    }
+                }
+                else
+                {
+                    ExibirMensagem("\n   O numero da edição deve conter apenas numeros. Tente novamente. ", ConsoleColor.DarkRed);
+                    continue;
                 }
             }
-            return revista;
+
+            return numeroDaEdicao;
         }
 
-        public static bool ValidarString(string str)
+        static string RegistrarDataInicial()
+        {
+            string dataInicial = "";
+            continuar = true;
+            while (continuar)
+            {
+                Console.Write("\n   Digite a data em que foi realizado o empréstimo (dd/mm/aaaa): ");
+                dataInicial = Console.ReadLine();
+
+                Regex regex = new Regex(@"^(\d{2})/(\d{2})/(\d{4})$");
+                Match match = regex.Match(dataInicial);
+
+                if (match.Success)
+                {
+                    int dia = int.Parse(match.Groups[1].Value);
+                    int mes = int.Parse(match.Groups[2].Value);
+                    int ano = int.Parse(match.Groups[3].Value);
+
+                    DateTime data;
+                    bool dataValida = DateTime.TryParseExact(dataInicial, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out data);
+
+                    if (dataValida && data >= DateTime.Today)
+                    {
+                        continuar = false;
+                    }
+                    else if (dia >= 1 && dia <= 31 && mes >= 1 && mes <= 12 && ano >= 1900 && ano <= 2023)
+                    {
+                        continuar = false;
+                    }
+                    else
+                    {
+                        ExibirMensagem("\n   Data inválida. Tente novamente.", ConsoleColor.DarkRed);
+                    }
+                }
+                else
+                {
+                    ExibirMensagem("\n   Data inválida. O formato esperado é dd/mm/aaaa. Tente novamente.", ConsoleColor.DarkRed);
+                }
+            }
+
+            return dataInicial;
+        }
+
+        public static bool ValidarVazio(string str)
         {
             if (!string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str))
                 return true;
@@ -760,20 +1032,20 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             Console.WriteLine();
             Console.WriteLine("   Digite:                                                                        ");
             Console.WriteLine();
-            Console.WriteLine("   1  - Para cadastrar uma nova caixa.                                            ");    //  ok
-            Console.WriteLine("   2  - Para visualizar suas caixas.                                              ");    //  ok
-            Console.WriteLine("   3  - Para editar as características de uma de suas caixas.                     ");    //  ok
-            Console.WriteLine("   4  - Para descartar uma de suas caixas.                                        ");    //  ok
-            Console.WriteLine();                                                                                              
-            Console.WriteLine("   5  - Para cadastrar uma revista.                                               ");    //  ok
-            Console.WriteLine("   6  - Para visualizar as revistas cadastradas.                                  ");    //  ok
-            Console.WriteLine("   7  - Para editar o cadastro de uma revista.                                    ");    //  ok
-            Console.WriteLine("   8  - Para excluir o cadastro de uma revista.                                   ");    //  ok
-            Console.WriteLine();                                                                                              
-            Console.WriteLine("   9  - Para cadastrar um novo amigo.                                             ");    //  ok
-            Console.WriteLine("   10 - Para visualizar os amigos já cadastrados.                                 ");    //  ok
-            Console.WriteLine("   11 - Para editar o cadastro de um amigo.                                       ");    //  ok
-            Console.WriteLine("   12 - Para excluir o cadastro de um amigo.                                      ");    //  ok
+            Console.WriteLine("   1  - Para cadastrar uma nova caixa.                                            ");    
+            Console.WriteLine("   2  - Para visualizar suas caixas.                                              ");    
+            Console.WriteLine("   3  - Para editar as características de uma de suas caixas.                     ");    
+            Console.WriteLine("   4  - Para descartar uma de suas caixas.                                        ");    
+            Console.WriteLine();                                                                                        
+            Console.WriteLine("   5  - Para cadastrar uma revista.                                               ");    
+            Console.WriteLine("   6  - Para visualizar as revistas cadastradas.                                  ");    
+            Console.WriteLine("   7  - Para editar o cadastro de uma revista.                                    ");    
+            Console.WriteLine("   8  - Para excluir o cadastro de uma revista.                                   ");    
+            Console.WriteLine();                                                                                        
+            Console.WriteLine("   9  - Para cadastrar um novo amigo.                                             ");    
+            Console.WriteLine("   10 - Para visualizar os amigos já cadastrados.                                 ");    
+            Console.WriteLine("   11 - Para editar o cadastro de um amigo.                                       ");    
+            Console.WriteLine("   12 - Para excluir o cadastro de um amigo.                                      ");    
             Console.WriteLine();                                                                                              
             Console.WriteLine("   13 - Para realizar um empréstimo.                                              ");          
             Console.WriteLine("   14 - Para visualizar os empréstimos em aberto.                                 ");          
@@ -783,7 +1055,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             Console.WriteLine();
             Console.WriteLine("   18 - Para realizar uma devolução.                                              ");
             Console.WriteLine();
-            Console.WriteLine("   19 - Para visualizar o registro de empréstimos realizados nos ultimos 30 dias. ");
+            Console.WriteLine("   19 - Para visualizar o registro de empréstimos realizados no mês atual.        ");
             Console.WriteLine();
             Console.WriteLine("   S  - Para sair.                                                                ");
             Console.WriteLine("__________________________________________________________________________________");
@@ -801,6 +1073,17 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                 }
             }
             return opcao;
+        }
+
+        public static void PopularCamposParaTeste(List<Amigo> listaAmigos, List<Revista> listaRevistas, List<Caixa> listaCaixas)
+        {
+            Amigo amigo = new Amigo("Tales","Lins","Rua Anápolis","49 99999999");
+            listaAmigos.Add(amigo);
+            Caixa caixa = new Caixa("rosa","caixa rosa");
+            listaCaixas.Add(caixa);
+            Revista revista = new Revista("Bátman","colecao", 1, 2020, caixa.etiqueta);
+            listaRevistas.Add(revista);
+
         }
     }
 }

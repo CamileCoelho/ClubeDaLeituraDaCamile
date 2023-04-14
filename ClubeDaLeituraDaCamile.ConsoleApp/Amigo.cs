@@ -15,22 +15,22 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         public string nomeResponsavel { get; set; }
         public string endereco { get; set; }
         public string numeroParaContato { get; set; }
-        public bool possuiEmprestimoEmAberto { get; set; }
+        public string possuiEmprestimoEmAberto { get; set; }
 
         public Amigo()
         {
                 
         }
-        public Amigo(string nome, string nomeResponsavel, string endereco, string numeroParaContato, bool possuiEmprestimoEmAberto)
+        public Amigo(string nome, string nomeResponsavel, string endereco, string numeroParaContato)
         {
             id = idCounter++;
             this.nome = nome;
             this.nomeResponsavel = nomeResponsavel;
             this.endereco = endereco;
             this.numeroParaContato = numeroParaContato;
-            this.possuiEmprestimoEmAberto = possuiEmprestimoEmAberto;
+            this.possuiEmprestimoEmAberto = " NÃO ";
         }
-        public void EditarAmigo(string nome, string nomeResponsavel, string endereco, string numeroParaContato, bool possuiEmprestimoEmAberto)
+        public void EditarAmigo(string nome, string nomeResponsavel, string endereco, string numeroParaContato, string possuiEmprestimoEmAberto)
         {            
             this.nome = nome;
             this.nomeResponsavel = nomeResponsavel;

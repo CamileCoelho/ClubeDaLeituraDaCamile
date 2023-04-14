@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClubeDaLeituraDaCamile.ConsoleApp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         public int numeroDaEdicao { get; set; }
         public int ano { get; set; }
         public string etiqueta { get; set; }
+        public string disponivel { get; set; }
 
         public Revista()
         {
@@ -28,14 +30,16 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             this.numeroDaEdicao = numeroDaEdicao;
             this.ano = ano;
             this.etiqueta = etiqueta;
+            this.disponivel = " DISPONÍVEL ";
         }
-        public void EditarRevista(string titulo, string tipoColecao, int numeroDaEdicao, int ano, string etiqueta)
+        public void EditarRevista(string titulo, string tipoColecao, int numeroDaEdicao, int ano, string etiqueta, string disponivel)
         {
             this.titulo = titulo;
             this.tipoColecao = tipoColecao;
             this.numeroDaEdicao = numeroDaEdicao;
             this.ano = ano;
             this.etiqueta = etiqueta;
+            this.disponivel = disponivel;
         }
-    }
+    }    
 }

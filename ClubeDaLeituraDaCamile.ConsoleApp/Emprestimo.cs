@@ -10,49 +10,62 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
     {
         private static int idCounter = 1;
         public int id { get; set; }
-        public int dataInicial { get; set; }
+        public string dataInicial { get; set; }
         public string devolucao { get; set; }
         public string nomeAmigo { get; set; }
         public string tituloRevista { get; set; }
+        public Revista revista { get; set; }
+        public Amigo amigo { get; set; }    
 
         public Emprestimo()
         {
 
         }
-        public Emprestimo(string nomeAmigo, string tituloRevista, int dataInicial)
+        public Emprestimo(string nomeAmigo, string tituloRevista, string dataInicial)
         {
             id = idCounter++;
             this.nomeAmigo = nomeAmigo;
             this.tituloRevista = tituloRevista;
             this.dataInicial = dataInicial;
-            Console.ForegroundColor = ConsoleColor.DarkRed;
             this.devolucao = " PENDENTE ";
-            Console.ForegroundColor = ConsoleColor.Cyan;
         }
-        public void EditarEmprestimo(string nomeAmigo, string tituloRevista, int dataInicial)
+        public Emprestimo(Amigo amigo, Revista revista, string dataInicial)
         {
+            id = idCounter++;
             this.nomeAmigo = nomeAmigo;
-            this.tituloRevista = tituloRevista;
-            this.dataInicial = dataInicial; 
-            Console.ForegroundColor = ConsoleColor.DarkRed;
+            this.revista = revista;
+            this.dataInicial = dataInicial;
             this.devolucao = " PENDENTE ";
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            this.revista.disponivel = " INISPONÍVEL ";
         }
-        public void RealizarDevolucao(string nomeAmigo, string tituloRevista, int dataInicial)
+        public void EditarEmprestimo(string nomeAmigo, string tituloRevista, string dataInicial)
         {
             this.nomeAmigo = nomeAmigo;
             this.tituloRevista = tituloRevista;
             this.dataInicial = dataInicial;
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            this.devolucao = " PENDENTE ";
+        }
+        public void EditarEmprestimo(Amigo amigo, Revista revista, string dataInicial)
+        {
+            this.amigo = amigo;
+            this.revista = revista;
+            this.dataInicial = dataInicial; 
+            this.devolucao = " PENDENTE ";
+        }
+        public void RealizarDevolucao(string nomeAmigo, string tituloRevista, string dataInicial)
+        {
+            this.nomeAmigo = nomeAmigo;
+            this.tituloRevista = tituloRevista;
+            this.dataInicial = dataInicial;
             this.devolucao = " OK ";
-            Console.ForegroundColor = ConsoleColor.Cyan;
+        }
+        public void RealizarDevolucao(Amigo amigo, Revista revista, string dataInicial)
+        {
+            this.amigo = amigo;
+            this.revista = revista;
+            this.dataInicial = dataInicial;
+            this.devolucao = " OK ";
+            this.revista.disponivel = " DISPONÍVEL ";
         }
     }
 }
-//string cor = "";
-//while (!ValidarString(cor))
-//{
-//    Console.Clear();
-//    Console.Write("\n   Digite a cor da caixa que deseja cadastrar: ");
-//    cor = Console.ReadLine();
-//}
