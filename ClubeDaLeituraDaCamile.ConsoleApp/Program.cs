@@ -252,7 +252,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
             string dataInicial = RegistrarDataInicial();
 
-            Emprestimo emprestimo = new Emprestimo(nomeAmigo, tituloRevista, dataInicial);
+            Emprestimo emprestimo = new Emprestimo(amigoEscolhido, revistaEscolhida, dataInicial);
 
             listaEmprestimos.Add(emprestimo);
 
