@@ -59,13 +59,13 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
                         string validacao = repositorioRevista.CadastrarRevista(revista);
 
-                        if (validacao == "\n   Caixa Cadastrada com sucesso!")
+                        if (validacao == "\n   Revista cadastrada com sucesso!")
                         {
-                            ExibirMensagem(validacao, ConsoleColor.DarkRed);
+                            ExibirMensagem(validacao, ConsoleColor.DarkGreen);
                         }
                         else
                         {
-                            ExibirMensagem(validacao, ConsoleColor.DarkGreen);
+                            ExibirMensagem(validacao, ConsoleColor.DarkRed);
                         }
                         continue;
                     case "2":

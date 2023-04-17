@@ -81,16 +81,14 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                                 "\n   Você deve cadastrar um emprestimo para visualizar seus emprestimos em aberto.", ConsoleColor.DarkRed);
                             continue;
                         }
-                        foreach (Emprestimo emprestimo in repositorioEmprestimo.ListarEmprestimos())
+                        else if (repositorioEmprestimo.ListarEmprestimos().Any(x => x.devolucao == " PENDENTE "))
                         {
-                            if (emprestimo.devolucao == " OK ")
-                            {
-                                ExibirMensagem("\n   Nenhum empréstimo em aberto. ", ConsoleColor.DarkRed);
-                                break;
-                            }
+                            MostrarListaEmprestimosEmAberto(repositorioEmprestimo);
+                            Console.ReadLine();
+                            continue;
                         }
-                        MostrarListaEmprestimosEmAberto(repositorioEmprestimo);
-                        Console.ReadLine();
+                        else
+                            ExibirMensagem("\n   Nenhum empréstimo em aberto. ", ConsoleColor.DarkRed);
                         continue;
                     case "3":
                         if (repositorioEmprestimo.ListarEmprestimos().Count == 0)
@@ -109,11 +107,11 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                                 "\n   Você deve cadastrar um emprestimo para editar um emprestimo. ", ConsoleColor.DarkRed);
                             continue;
                         }
-                        Console.WriteLine("\n   Obs.: Os campos de Amigo e Revista não podem ser editados. " +
-                            "\n   Caso queira alterá-los, apague esse empréstimo e registre um novo.");
 
                         Emprestimo emprestimoToEdit = repositorioEmprestimo.SelecionarEmprestimoPorId(SelecionarIdEmprestimo(repositorioEmprestimo));
                         
+                        Console.WriteLine("\n   Obs.: Os campos de Amigo e Revista não podem ser editados. " +
+                            "\n   Caso queira alterá-los, apague esse empréstimo e registre um novo.");
                         string dataInicial2 = RegistrarDataInicial();
                         
                         if (emprestimoToEdit == null)
@@ -177,6 +175,10 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                             if (dataAbertura.Month == DateTime.Now.Month && emprestimo == null)
                             {
                                 ExibirMensagem("\n   Nenhum registro de empréstimo no mês atual. ", ConsoleColor.DarkRed);
+                                break;
+                            }
+                            else
+                            {
                                 continue;
                             }
                         }
