@@ -23,7 +23,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioRevista, repositorioAmigo, telaRevista, telaAmigo);
 
             bool continuar = true;
-            // PopularCamposParaTeste(repositorioAmigo.ListarAmigos(), repositorioRevista.ListarRevistas(), repositorioCaixa.ListarCaixas());
+            PopularCamposParaTeste(repositorioAmigo.ListarAmigos(), repositorioRevista.ListarRevistas(), repositorioCaixa.ListarCaixas());
 
             do
             {

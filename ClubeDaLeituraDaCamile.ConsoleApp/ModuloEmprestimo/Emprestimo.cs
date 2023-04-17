@@ -61,14 +61,12 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.ModuloEmprestimo
 
             if (amigo == null)
                 mensagem += "AMIGO_INVÁLIDO ";
-
-            if (amigo.possuiEmprestimoEmAberto == " SIM ")
+            else if (amigo.possuiEmprestimoEmAberto == " SIM ")
                 mensagem += "AMIGO_INDISPONÍVEL ";
 
             if (revista == null)
                 mensagem += "REVISTA_INVALIDA ";
-
-            if (revista.disponivel == " INISPONÍVEL ")
+            else if (revista.disponivel == " INISPONÍVEL " || revista == null)
                 mensagem += "REVISTA_INDISPONÍVEL ";
 
             if (mensagem != "")
