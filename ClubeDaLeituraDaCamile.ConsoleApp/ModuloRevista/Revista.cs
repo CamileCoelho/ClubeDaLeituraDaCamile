@@ -46,24 +46,24 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.ModuloRevista
             this.disponivel = disponivel;
         }
 
-        public string Valdiar(string titulo, string tipoColecao, Caixa caixa)
+        public string Validar(string titulo, string tipoColecao, Caixa caixa)
         {
             Validador valida = new Validador();
             string mensagem = "";
 
             if (valida.ValidarString(titulo))
-                mensagem += " NOME_INVALIDO ";
+                mensagem += "NOME_INVALIDO ";
 
             if (valida.ValidarString(tipoColecao))
-                mensagem += " NOME_DO_RESPONSAVEL_INVALIDO ";
+                mensagem += "NOME_DO_RESPONSAVEL_INVALIDO ";
 
             if (caixa == null)
-                mensagem += " CAIXA_INVALIDA ";
+                mensagem += "CAIXA_INVALIDA ";
 
             if (mensagem != "")
                 return mensagem;
 
-            return "REGISTRO_VALIDO";
+            return "REGISTRO_REALIZADO";
         }
 
     }

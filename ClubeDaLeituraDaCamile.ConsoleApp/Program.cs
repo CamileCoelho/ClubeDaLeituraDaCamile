@@ -1,11 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Runtime.ConstrainedExecution;
+﻿using ClubeDaLeituraDaCamile.ConsoleApp.Compartilhado;
 using ClubeDaLeituraDaCamile.ConsoleApp.ModuloAmigo;
 using ClubeDaLeituraDaCamile.ConsoleApp.ModuloCaixa;
-using ClubeDaLeituraDaCamile.ConsoleApp.ModuloEmprestimo;
-using ClubeDaLeituraDaCamile.ConsoleApp.Compartilhado;
 using ClubeDaLeituraDaCamile.ConsoleApp.ModuloRevista;
 
 namespace ClubeDaLeituraDaCamile.ConsoleApp
@@ -28,7 +23,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo, repositorioRevista, repositorioAmigo, telaRevista, telaAmigo);
 
             bool continuar = true;
-            PopularCamposParaTeste(repositorioAmigo.ListarAmigos(), repositorioRevista.ListarRevistas(), repositorioCaixa.ListarCaixas());
+            // PopularCamposParaTeste(repositorioAmigo.ListarAmigos(), repositorioRevista.ListarRevistas(), repositorioCaixa.ListarCaixas());
 
             do
             {
@@ -38,7 +33,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                 {
                     case "S":
                         continuar = false;
-                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.White;
                         break;
                     case "1":
                         telaCaixa.VisualizarTela();
@@ -93,14 +88,14 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                 
         public static void PopularCamposParaTeste(List<Amigo> listaAmigos, List<Revista> listaRevistas, List<Caixa> listaCaixas)
         {
-            Amigo amigo = new Amigo("Tales", "Lins", "Rua Anápolis", "49 99999999");
+            Amigo amigo = new Amigo("Tales", "Lins", "Rua Anápolis", "49 99999-9999");
             listaAmigos.Add(amigo);
             Caixa caixa = new Caixa("rosa", "caixa rosa");
             listaCaixas.Add(caixa);
             Revista revista = new Revista("Bátman", "colecao", 1, 2020, caixa);
             listaRevistas.Add(revista);
 
-            Amigo amigo2 = new Amigo("Camile", "Cici", "Av.Luis De C.", "49 99999999");
+            Amigo amigo2 = new Amigo("Camile", "Cici", "Av.Luis De C.", "49 99999-9999");
             listaAmigos.Add(amigo2);
             Caixa caixa2 = new Caixa("azul", "caixa azul");
             listaCaixas.Add(caixa2);

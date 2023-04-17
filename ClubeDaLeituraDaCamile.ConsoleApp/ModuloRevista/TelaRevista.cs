@@ -33,6 +33,12 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         Console.ResetColor();
                         break;
                     case "1":
+                        if (repositorioCaixa.ListarCaixas().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhuma caixa cadastrada. " +
+                                "\n   Você deve cadastrar uma caixa antes de registrar uma revista. ", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         string titulo, tipoColecao;
                         int numeroDaEdicao, ano;
                         Caixa caixaToSelect;
@@ -42,9 +48,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         titulo = Console.ReadLine();
                         Console.Write("\n   Digite a coleção dessa revista: ");
                         tipoColecao = Console.ReadLine();
-                        Console.Write("\n   Digite numero da edição dessa revista: ");
                         numeroDaEdicao = LerApenasNumero();
-                        Console.Write("\n   Digite o ano dessa revista: ");
                         ano = ObterAnoFormatoCorreto();
 
                         telaCaixa.MostarListaCaixas(repositorioCaixa);
@@ -55,21 +59,32 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
                         string validacao = repositorioRevista.CadastrarRevista(revista);
 
-                        if (validacao == "   Caixa Cadastrada com sucesso!")
-                        {
-                            ExibirMensagem(validacao, ConsoleColor.DarkGreen);
-                        }
-                        else
+                        if (validacao == "\n   Caixa Cadastrada com sucesso!")
                         {
                             ExibirMensagem(validacao, ConsoleColor.DarkRed);
                         }
+                        else
+                        {
+                            ExibirMensagem(validacao, ConsoleColor.DarkGreen);
+                        }
                         continue;
                     case "2":
+                        if (repositorioRevista.ListarRevistas().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhuma revista cadastrada. " +
+                                "\n   Você deve cadastrar uma revista para poder visualizar suas revistas cadastradas.", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         MostrarListaRevistas(repositorioRevista);
                         Console.ReadLine();
                         continue;
                     case "3":
-
+                        if (repositorioRevista.ListarRevistas().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhuma revista cadastrada. " +
+                                "\n   Você deve cadastrar uma revista antes de editar o cadastro de uma revista.", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         Revista revistaToEdit = repositorioRevista.SelecionarRevistaPorId(SelecionarIdRevista(repositorioRevista));
 
                         if (revistaToEdit == null)
@@ -87,18 +102,16 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                             tituloToEdit = Console.ReadLine();
                             Console.Write("\n   Digite a coleção dessa revista: ");
                             tipoColecaoToEdit = Console.ReadLine();
-                            Console.Write("\n   Digite numero da edição dessa revista: ");
                             numeroDaEdicaoToEdit = LerApenasNumero();
-                            Console.Write("\n   Digite o ano dessa revista: ");
                             anoToEdit = ObterAnoFormatoCorreto();
 
                             telaCaixa.MostarListaCaixas(repositorioCaixa);
 
                             caixaToEdit = repositorioCaixa.SelecionarCaixaPorId(telaCaixa.SelecionarIdCaixa(repositorioCaixa));
 
-                            string validacaoEdit = revistaToEdit.Valdiar(tituloToEdit, tipoColecaoToEdit, caixaToEdit);
+                            string validacaoEdit = revistaToEdit.Validar(tituloToEdit, tipoColecaoToEdit, caixaToEdit);
 
-                            if (validacaoEdit == "REGISTRO_VALIDO")
+                            if (validacaoEdit == "REGISTRO_REALIZADO")
                             {
                                 ExibirMensagem(repositorioRevista.EditarRevista(revistaToEdit, tituloToEdit, tipoColecaoToEdit, numeroDaEdicaoToEdit, anoToEdit, caixaToEdit), ConsoleColor.DarkGreen);
                             }
@@ -110,15 +123,21 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         }
                         continue;
                     case "4":
+                        if (repositorioRevista.ListarRevistas().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhuma revista cadastrada. " +
+                                "\n   Você deve cadastrar uma revista antes de excluir o cadastro de uma revista. ", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         string validacaoExclusao = repositorioRevista.ExcluirRevista(SelecionarIdRevista(repositorioRevista), validador);
 
-                        if (validacaoExclusao == "   Revista excluída com sucesso! ")
+                        if (validacaoExclusao == "\n   Revista excluída com sucesso! ")
                         {
-                            ExibirMensagem("   Revista excluída com sucesso! ", ConsoleColor.DarkGreen);
+                            ExibirMensagem("\n   Revista não excluída. ", ConsoleColor.DarkRed);
                         }
                         else
                         {
-                            ExibirMensagem("   Revista não excluída. ", ConsoleColor.DarkRed);
+                            ExibirMensagem("\n   Revista excluída com sucesso! ", ConsoleColor.DarkGreen);
                         }
                         continue;
                 }
@@ -163,13 +182,19 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         {
             Console.Clear();
             MostrarListaRevistas(repositorioRevista);
-            Console.Write("\n   Digite o id da revista: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+            Console.Write("\n   Digite o id da revista: "); 
+            int id;
+            while (!int.TryParse(Console.ReadLine(), out id))
+            {
+                ExibirMensagem("\n   Entrada inválida! Digite um número inteiro. ", ConsoleColor.DarkRed);
+                Console.Write("\n   Digite o id da revista: ");
+            }
             return id;
         }
 
         public void MostrarListaRevistas(RepositorioRevista repositorioRevista)
         {
+            Console.Clear();
             Console.WriteLine("_____________________________________________________________________________________________");
             Console.WriteLine();
             Console.WriteLine("                               Lista de Revistas                                             ");
@@ -198,7 +223,6 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
                 if (int.TryParse(numeroInput, out numeroDaEdicao))
                 {
-                    // Verifica se a entrada do usuário consiste apenas em dígitos numéricos
                     if (numeroInput.All(char.IsDigit))
                     {
                         break;

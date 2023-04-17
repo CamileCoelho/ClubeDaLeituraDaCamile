@@ -43,6 +43,18 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         Console.ResetColor();
                         break;
                     case "1":
+                        if (repositorioRevista.ListarRevistas().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhuma revista cadastrada. " +
+                                "\n   Você deve cadastrar uma revista para poder realizar um emprestimo.", ConsoleColor.DarkRed);
+                            continue;
+                        }
+                        if (repositorioAmigo.ListarAmigos().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhum amigo cadastrado. " +
+                                "\n   Você deve cadastrar um amigo para poder realizar um emprestimo.", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         Amigo amigoToSelect = repositorioAmigo.SelecionarAmigoPorId(telaAmigo.SelecionarIdAmigo(repositorioAmigo));
 
                         Revista revistaToSelect = repositorioRevista.SelecionarRevistaPorId(telaRevista.SelecionarIdRevista(repositorioRevista));
@@ -53,7 +65,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
                         string validacaoCadastro = repositorioEmprestimo.CadastrarEmprestimo(emprestimoToAdd);
 
-                        if (validacaoCadastro == "   Emprestimo cadastrado com sucesso!")
+                        if (validacaoCadastro == "\n   Emprestimo cadastrado com sucesso!")
                         {
                             ExibirMensagem(validacaoCadastro, ConsoleColor.DarkGreen);
                         }
@@ -63,15 +75,43 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         }
                         continue;
                     case "2":
+                        if (repositorioEmprestimo.ListarEmprestimos().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhum empréstimo cadastrado. " +
+                                "\n   Você deve cadastrar um emprestimo para visualizar seus emprestimos em aberto.", ConsoleColor.DarkRed);
+                            continue;
+                        }
+                        foreach (Emprestimo emprestimo in repositorioEmprestimo.ListarEmprestimos())
+                        {
+                            if (emprestimo.devolucao == " OK ")
+                            {
+                                ExibirMensagem("\n   Nenhum empréstimo em aberto. ", ConsoleColor.DarkRed);
+                                continue;
+                            }
+                        }
                         MostrarListaEmprestimosEmAberto(repositorioEmprestimo);
                         Console.ReadLine();
                         continue;
                     case "3":
+                        if (repositorioEmprestimo.ListarEmprestimos().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhum empréstimo cadastrado. " +
+                                "\n   Você deve cadastrar um emprestimo para visualizar seus emprestimos. ", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         MostrarListaEmprestimos(repositorioEmprestimo);
                         Console.ReadLine();
                         continue;
                     case "4":
-                        
+                        if (repositorioEmprestimo.ListarEmprestimos().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhum empréstimo cadastrado. " +
+                                "\n   Você deve cadastrar um emprestimo para editar um emprestimo. ", ConsoleColor.DarkRed);
+                            continue;
+                        }
+                        Console.WriteLine("\n   Obs.: Os campos de Amigo e Revista não podem ser editados. " +
+                            "\n   Caso queira alterá-los, apague esse empréstimo e registre um novo.");
+
                         string dataInicial2 = RegistrarDataInicial();
 
                         Emprestimo emprestimoToEdit = repositorioEmprestimo.SelecionarEmprestimoPorId(SelecionarIdEmprestimo(repositorioEmprestimo));
@@ -86,30 +126,60 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         }
                         continue;
                     case "5":
+                        if (repositorioEmprestimo.ListarEmprestimos().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhum empréstimo cadastrado. " +
+                                "\n   Você deve cadastrar um emprestimo para excluir um emprestimo. ", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         string validacaoExclusao = repositorioEmprestimo.ExcluirEmprestimo(SelecionarIdEmprestimo(repositorioEmprestimo), validador);
 
-                        if (validacaoExclusao == "   Empréstimo excluído com sucesso! ")
+                        if (validacaoExclusao == "\n   Empréstimo excluído com sucesso! ")
                         {
-                            ExibirMensagem("   Empréstimo excluído com sucesso! ", ConsoleColor.DarkGreen);
+                            ExibirMensagem("\n   Empréstimo excluído com sucesso! ", ConsoleColor.DarkGreen);
                         }
                         else
                         {
-                            ExibirMensagem("   Empréstimo não excluído. ", ConsoleColor.DarkRed);
+                            ExibirMensagem("\n   Empréstimo não excluído. ", ConsoleColor.DarkRed);
                         }
                         continue;
                     case "6":
+                        if (repositorioEmprestimo.ListarEmprestimos().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhum empréstimo cadastrado. " +
+                                "\n   Você deve cadastrar um emprestimo para realizar uma devolução. ", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         MostrarListaEmprestimosEmAberto(repositorioEmprestimo);
 
-                        if (repositorioEmprestimo.RealizarDevolucao(SelecionarIdEmprestimo(repositorioEmprestimo)) == "   Revista devolvida com sucesso! ")
+                        string validacaoDevolucao = repositorioEmprestimo.RealizarDevolucao(SelecionarIdEmprestimo(repositorioEmprestimo));
+
+                        if (validacaoDevolucao == "\n   Revista devolvida com sucesso! ")
                         {
-                            ExibirMensagem("   Revista devolvida com sucesso! ", ConsoleColor.DarkGreen);
+                            ExibirMensagem("\n   Revista devolvida com sucesso! ", ConsoleColor.DarkGreen);
                         }
                         else
                         {
-                            ExibirMensagem("   Revista não devolvida. ", ConsoleColor.DarkRed);
+                            ExibirMensagem("\n   Revista não devolvida. ", ConsoleColor.DarkRed);
                         }
                         continue;
                     case "7":
+                        if (repositorioEmprestimo.ListarEmprestimos().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhum empréstimo cadastrado. " +
+                                "\n   Você deve cadastrar um emprestimo para visualizar seus empréstimos desse mês. ", ConsoleColor.DarkRed);
+                            continue;
+                        }
+                        foreach (Emprestimo emprestimo in repositorioEmprestimo.ListarEmprestimos())
+                        {
+                            DateTime dataAbertura = DateTime.ParseExact(emprestimo.dataInicial, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+                            if (dataAbertura.Month == DateTime.Now.Month && emprestimo == null)
+                            {
+                                ExibirMensagem("\n   Nenhum registro de empréstimo no mês atual. ", ConsoleColor.DarkRed);
+                                continue;
+                            }
+                        }
                         MostrarListaEmprestimosMes(repositorioEmprestimo);
                         Console.ReadLine();
                         continue;
@@ -163,8 +233,13 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
         {
             Console.Clear();
             MostrarListaEmprestimosEmAberto(repositorioEmprestimo);
-            Console.Write("\n   Digite o id do emprestimo: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+            Console.Write("\n   Digite o id do emprestimo: "); 
+            int id;
+            while (!int.TryParse(Console.ReadLine(), out id))
+            {
+                ExibirMensagem("\n   Entrada inválida! Digite um número inteiro. ", ConsoleColor.DarkRed);
+                Console.Write("\n   Digite o id do emprestimo: ");
+            }
             return id;
         }
 
@@ -174,7 +249,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             bool continuar = true;
             while (continuar)
             {
-                Console.Write("   Digite a data em que foi realizado o empréstimo (dd/mm/aaaa): ");
+                Console.Write("\n   Digite a data em que foi realizado o empréstimo (dd/mm/aaaa): ");
                 dataInicial = Console.ReadLine();
 
                 Regex regex = new Regex(@"^(\d{2})/(\d{2})/(\d{4})$");
@@ -199,12 +274,12 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                     }
                     else
                     {
-                        ExibirMensagem("   Data inválida. Tente novamente.", ConsoleColor.DarkRed);
+                        ExibirMensagem("\n   Data inválida. Tente novamente.", ConsoleColor.DarkRed);
                     }
                 }
                 else
                 {
-                    ExibirMensagem("   Data inválida. O formato esperado é dd/mm/aaaa. Tente novamente.", ConsoleColor.DarkRed);
+                    ExibirMensagem("\n   Data inválida. O formato esperado é dd/mm/aaaa. Tente novamente.", ConsoleColor.DarkRed);
                 }
             }
 

@@ -43,27 +43,27 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.ModuloAmigo
             this.possuiEmprestimoEmAberto = possuiEmprestimoEmAberto;
         }
 
-        public string Valdiar(string nome, string nomeResponsavel, string endereco, string numeroParaContato)
+        public string Validar(string nome, string nomeResponsavel, string endereco, string numeroParaContato)
         {
             Validador valida = new Validador();
             string mensagem = "";
 
             if (valida.ValidarString(nome))
-                mensagem += " NOME_INVALIDO ";
+                mensagem += "NOME_INVALIDO ";
 
             if (valida.ValidarString(nomeResponsavel))
-                mensagem += " NOME_DO_RESPONSAVEL_INVALIDO ";
+                mensagem += "NOME_DO_RESPONSAVEL_INVALIDO ";
 
             if (valida.ValidarString(endereco))
-                mensagem += " ENDEREÇO_INVALIDO ";
+                mensagem += "ENDEREÇO_INVALIDO ";
 
             if (valida.ValidaTelefone(numeroParaContato))
-                mensagem += " TELEFONE_INVALIDO ";
+                mensagem += "NUMERO_PARA_CONTATO_INVALIDO ";
 
             if (mensagem != "")
                 return mensagem;
 
-            return "REGISTRO_VALIDO";
+            return "REGISTRO_REALIZADO";
         }
     }
 }

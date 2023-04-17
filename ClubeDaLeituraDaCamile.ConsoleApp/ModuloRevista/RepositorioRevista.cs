@@ -12,14 +12,14 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
         public string CadastrarRevista(Revista revistaToAdd)
         {
-            string validacao = revistaToAdd.Valdiar(revistaToAdd.titulo, revistaToAdd.tipoColecao, revistaToAdd.caixa);
-            if (validacao == "REGISTRO_VALIDO")
+            string validacao = revistaToAdd.Validar(revistaToAdd.titulo, revistaToAdd.tipoColecao, revistaToAdd.caixa);
+            if (validacao == "REGISTRO_REALIZADO")
             {
                 listaRevistas.Add(revistaToAdd);
-                return "   Caixa Cadastrada com sucesso!";
+                return "\n   Revista cadastrada com sucesso!";
             }
 
-            return "   Caixa Não Cadastrada: "+ validacao;
+            return "\n   Revista Não Cadastrada: " + validacao;
         }
 
         public string EditarRevista(Revista revistaToEdit, string titulo, string tipoColecao, int numeroDaEdicao, int ano, Caixa caixa)
@@ -29,7 +29,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             revistaToEdit.numeroDaEdicao = numeroDaEdicao;
             revistaToEdit.ano = ano;
             revistaToEdit.caixa = caixa;
-            return "   Revista editada com sucesso!";
+            return "\n   Revista editada com sucesso!";
         }
 
         public string ExcluirRevista(int id, Validador validador)
@@ -41,9 +41,9 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             if (revistaToDelete != null && validacaoExclusao == "SUCESSO!")
             {
                 listaRevistas.Remove(revistaToDelete);
-                return "   Revista excluida com sucesso!";
+                return "\n   Revista excluida com sucesso!";
             }
-            return "   Revista não excluida: " + validacaoExclusao;
+            return "\n   Revista não excluida: " + validacaoExclusao;
         }
 
         public List<Revista> ListarRevistas()

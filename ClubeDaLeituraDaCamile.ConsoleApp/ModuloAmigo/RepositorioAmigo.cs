@@ -10,14 +10,15 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
         public string CadastrarAmigo(Amigo amigoToAdd)
         {
-            string validacao = amigoToAdd.Valdiar(amigoToAdd.nome, amigoToAdd.nomeResponsavel, amigoToAdd.endereco, amigoToAdd.numeroParaContato);
-            if (validacao == "REGISTRO_VALIDO")
+            string validacao = amigoToAdd.Validar(amigoToAdd.nome, amigoToAdd.nomeResponsavel, amigoToAdd.endereco, amigoToAdd.numeroParaContato);
+            
+            if (validacao == "REGISTRO_REALIZADO")
             {
                 listaAmigos.Add(amigoToAdd);
-                return "\n   Amigo cadastrado com Sucesso! ";
+                return "\n   Amigo cadastrado com Sucesso!";
             }
-
-            return "   Amigo Não Cadastrado: "+ validacao;
+            
+                return "\n   Amigo Não Cadastrado: " + validacao;
         }
                 
         public string EditarAmigo(Amigo amigoToEdit, string nome, string nomeResponsavel, string endereco, string numeroParaContato)
@@ -26,7 +27,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             amigoToEdit.nomeResponsavel = nomeResponsavel;
             amigoToEdit.endereco = endereco;
             amigoToEdit.numeroParaContato = numeroParaContato;
-            return "   Amigo editado com sucesso!";
+            return "\n   Amigo editado com sucesso!";
         }
 
         public string ExcluirAmigo(int id, Validador validador)
@@ -38,9 +39,9 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             if (amigoToDelete != null && validacaoExclusao == "SUCESSO!")
             {
                 listaAmigos.Remove(amigoToDelete);
-                return "   Amigo excluido com sucesso!";
+                return "\n   Amigo excluido com sucesso! ";
             }
-            return "   Amigo não excluido: "+validacaoExclusao;
+            return "\n   Amigo não excluido: " + validacaoExclusao;
         }
 
         public List<Amigo> ListarAmigos()

@@ -36,9 +36,9 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.Compartilhado
             Regex Rgx = new Regex(@"^\(\d{2}\)\d{5}-\d{4}$");
 
             if (Rgx.IsMatch(telefone))
-                return true;
-            else
                 return false;
+            else
+                return true;
         }
 
         // Opitei por usar uma expressão lâmbida ao invez de percorer usando o parão a baixo

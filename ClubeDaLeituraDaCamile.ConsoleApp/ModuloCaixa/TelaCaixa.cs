@@ -35,7 +35,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
                         Caixa caixa = new Caixa(cor, etiqueta);
                         string validacao = repositorioCaixa.CadastrarCaixa(caixa);
-                        if (validacao == "   Caixa Cadastrada com sucesso!")
+                        if (validacao == "\n   Caixa Cadastrada com sucesso!")
                         {
                             ExibirMensagem(validacao, ConsoleColor.DarkGreen);
                         }
@@ -45,10 +45,22 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         }
                         continue;
                     case "2":
+                        if (repositorioCaixa.ListarCaixas().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhuma caixa cadastrada. " +
+                                "\n   Você deve cadastrar uma caixa para poder visualizar suas caixas cadastradas.", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         MostarListaCaixas(repositorioCaixa);
                         Console.ReadLine();
                         continue;
                     case "3":
+                        if (repositorioCaixa.ListarCaixas().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhuma caixa cadastrada. " +
+                                "\n   Você deve cadastrar uma caixa para poder editar o cadastro de uma caixa.", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         Caixa caixaToEdit = repositorioCaixa.SelecionarCaixaPorId(SelecionarIdCaixa(repositorioCaixa));
 
                         if (caixaToEdit == null)
@@ -59,7 +71,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         {
                             ImputCaixa(out cor, out etiqueta);
                             string validacaoEdit = caixaToEdit.Validar(cor, etiqueta);
-                            if (validacaoEdit == "REGISTRO_VALIDO")
+                            if (validacaoEdit == "REGISTRO_REALIZADO")
                             {
                                 ExibirMensagem(validacaoEdit, ConsoleColor.DarkGreen);
                             }
@@ -71,15 +83,21 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         }
                         continue;
                     case "4":
+                        if (repositorioCaixa.ListarCaixas().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhuma caixa cadastrada. " +
+                                "\n   Você deve cadastrar uma caixa para poder excluir o cadastro de uma caixa.", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         string validacaoExclusao = repositorioCaixa.ExcluirCaixa(SelecionarIdCaixa(repositorioCaixa), validador);
 
-                        if (validacaoExclusao == "   Caixa excluida com sucesso! ")
+                        if (validacaoExclusao == "\n   Caixa excluida com sucesso! ")
                         {
-                            ExibirMensagem(validacaoExclusao, ConsoleColor.DarkGreen);
+                            ExibirMensagem(validacaoExclusao, ConsoleColor.DarkRed);
                         }
                         else
                         {
-                            ExibirMensagem(validacaoExclusao , ConsoleColor.DarkRed);
+                            ExibirMensagem(validacaoExclusao , ConsoleColor.DarkGreen);
 
                         }
 
@@ -137,7 +155,12 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             MostarListaCaixas(repositorioCaixa);
 
             Console.Write("\n   Digite o id da caixa: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+            int id;
+            while (!int.TryParse(Console.ReadLine(), out id))
+            {
+                ExibirMensagem("\n   Entrada inválida! Digite um número inteiro. ", ConsoleColor.DarkRed);
+                Console.Write("\n   Digite o id da caixa: ");
+            }
             return id;
         }
 

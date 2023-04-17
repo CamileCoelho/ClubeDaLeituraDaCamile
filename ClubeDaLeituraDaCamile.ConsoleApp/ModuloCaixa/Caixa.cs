@@ -37,15 +37,15 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.ModuloCaixa
             string mensagem = "";
 
             if (valida.ValidarString(cor))
-                mensagem += " COR_INVALIDA ";
+                mensagem += "COR_INVALIDA ";
 
             if (valida.ValidarString(etiqueta))
-                mensagem += " ETIQUETA_INVALIDA ";
+                mensagem += "ETIQUETA_INVALIDA ";
 
             if (mensagem != "")
                 return mensagem;
 
-            return "REGISTRO_VALIDO";
+            return "REGISTRO_REALIZADO";
         }
     }
 }

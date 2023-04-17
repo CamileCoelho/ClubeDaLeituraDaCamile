@@ -19,10 +19,10 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             {
                 listaEmprestimos.Add(emprestimoToAdd);
                 emprestimoToAdd.AbrirUmEmprestimoEAtualizarDados();
-                return "   Emprestimo cadastrado com sucesso!";
+                return "\n   Emprestimo cadastrado com sucesso!";
             }
 
-            return "   Emprestimo Não Cadastrado: "+ validacao;
+            return "\n   Emprestimo Não Cadastrado: " + validacao;
         }
 
         public string EditarEmprestimo(Emprestimo emprestimoToEdit,  string dataInicial)
@@ -30,7 +30,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             // NÃO PODE ALTERAR AMIGO E REVISTA CADASTRADOS
             emprestimoToEdit.dataInicial = dataInicial;
 
-            return "   Empretimo editado com sucesso!";
+            return "\n   Empretimo editado com sucesso!";
         }
 
         public string ExcluirEmprestimo(int id, Validador validador)
@@ -41,9 +41,9 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             {
                 listaEmprestimos.Remove(emprestimoToDelete);
                 emprestimoToDelete.EncerrarEmprestimoEAtualizarDados();
-                return "   Emprestimo excluido com sucesso!";
+                return "\n   Emprestimo excluido com sucesso!";
             }
-            return "   Empréstimo não excluido!";
+            return "\n   Empréstimo não excluido!";
         }
 
         public string RealizarDevolucao(int id)
@@ -55,9 +55,9 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             if (emprestimoToReturn != null)
             {
                 emprestimoToReturn.EncerrarEmprestimoEAtualizarDados();
-                return "   Revista devolvida com sucesso!";
+                return "\n   Revista devolvida com sucesso!";
             }
-            return "   Revista não devolvida! ";
+            return "\n   Revista não devolvida! ";
         }
 
         public List<Emprestimo> ListarEmprestimos()

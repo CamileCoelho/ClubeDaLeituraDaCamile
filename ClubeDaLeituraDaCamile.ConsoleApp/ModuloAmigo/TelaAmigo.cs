@@ -34,20 +34,35 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
                         Amigo amigo = new Amigo(nome, nomeResponsavel, endereco, numeroParaContato);
 
-                        if (repositorioAmigo.CadastrarAmigo(amigo) == "   Amigo cadastrado com sucesso!")
+                        string validacaoAmigoAdd = repositorioAmigo.CadastrarAmigo(amigo);
+
+                        if (validacaoAmigoAdd == "\n   Amigo cadastrado com Sucesso!")
                         {
-                            ExibirMensagem("   Amigo cadastrado com sucesso!", ConsoleColor.DarkGreen);
+                            ExibirMensagem(validacaoAmigoAdd, ConsoleColor.DarkGreen);
+                            continue;
                         }
                         else
                         {
-                            ExibirMensagem("   Amigo não cadastrado. ", ConsoleColor.DarkRed);
+                            ExibirMensagem(validacaoAmigoAdd, ConsoleColor.DarkRed);
+                            continue;
                         }
-                        continue;
                     case "2":
+                        if (repositorioAmigo.ListarAmigos().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhum amigo cadastrado. " +
+                                "\n   Você deve cadastrar um amigo para poder editar o cadastro de um amigo. ", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         MostrarListaAmigos(repositorioAmigo);
                         Console.ReadLine();
                         continue;
                     case "3":
+                        if (repositorioAmigo.ListarAmigos().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhum amigo cadastrado. " +
+                                "\n   Você deve cadastrar um amigo para poder visualizar seus amigos cadastrados. ", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         Amigo amigoToEdit = repositorioAmigo.SelecionarAmigoPorId(SelecionarIdAmigo(repositorioAmigo));
 
                         if (amigoToEdit == null)
@@ -57,9 +72,11 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         else
                         {
                             ImputAmigo(out nome, out nomeResponsavel, out endereco, out numeroParaContato);
-                            string validacao = amigoToEdit.Valdiar(nome, nomeResponsavel, endereco, numeroParaContato);
-                            if (validacao == "REGISTRO_VALIDO")
+                            string validacao = amigoToEdit.Validar(nome, nomeResponsavel, endereco, numeroParaContato);
+
+                            if (validacao == "REGISTRO_REALIZADO")
                             {
+
                                 ExibirMensagem(validacao, ConsoleColor.DarkGreen);
                             }
                             else
@@ -70,15 +87,21 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         }
                         continue;
                     case "4":
+                        if (repositorioAmigo.ListarAmigos().Count == 0)
+                        {
+                            ExibirMensagem("\n   Nenhum amigo cadastrado. " +
+                                "\n   Você deve cadastrar um amigo para poder excluir o cadastro de um amigo. ", ConsoleColor.DarkRed);
+                            continue;
+                        }
                         string validacaoExclusao = repositorioAmigo.ExcluirAmigo(SelecionarIdAmigo(repositorioAmigo), validador);
 
-                        if (validacaoExclusao == "   Amigo excluido com sucesso! ")
+                        if (validacaoExclusao == "\n   Amigo excluido com sucesso! ")
                         {
-                            ExibirMensagem("   Amigo excluido com sucesso! ", ConsoleColor.DarkGreen);
+                            ExibirMensagem(validacaoExclusao, ConsoleColor.DarkGreen);
                         }
                         else
                         {
-                            ExibirMensagem("   Amigo não excluido. ", ConsoleColor.DarkRed);
+                            ExibirMensagem(validacaoExclusao, ConsoleColor.DarkRed);
                         }
 
                         continue;
@@ -141,7 +164,12 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             MostrarListaAmigos(repositorioAmigo);
 
             Console.Write("\n   Digite o id do amigo: ");
-            int id = Convert.ToInt32(Console.ReadLine());
+            int id;
+            while (!int.TryParse(Console.ReadLine(), out id))
+            {
+                ExibirMensagem("\n   Entrada inválida! Digite um número inteiro. ", ConsoleColor.DarkRed);
+                Console.Write("\n   Digite o id do amigo: ");
+            }
             return id;
         }
 
