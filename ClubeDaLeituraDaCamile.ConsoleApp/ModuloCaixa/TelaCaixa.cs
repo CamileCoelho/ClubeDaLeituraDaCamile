@@ -47,7 +47,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                     case "2":
                         if (repositorioCaixa.ListarCaixas().Count == 0)
                         {
-                            ExibirMensagem("\n   Nenhuma caixa cadastrada. " +
+                            ExibirMensagem("\n   Nenhuma caixa cadastrada. " 
                                 "\n   Você deve cadastrar uma caixa para poder visualizar suas caixas cadastradas.", ConsoleColor.DarkRed);
                             continue;
                         }

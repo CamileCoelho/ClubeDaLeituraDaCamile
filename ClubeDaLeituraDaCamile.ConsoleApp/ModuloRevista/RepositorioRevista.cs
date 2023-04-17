@@ -8,7 +8,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 {
     public class RepositorioRevista : RepositorioMae
     {
-        public List<Revista> listaRevistas = new List<Revista>();
+        private List<Revista> listaRevistas = new List<Revista>();
 
         public string CadastrarRevista(Revista revistaToAdd)
         {

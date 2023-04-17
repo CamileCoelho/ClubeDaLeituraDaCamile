@@ -6,7 +6,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 {
     public class RepositorioAmigo : RepositorioMae
     {
-        public List<Amigo> listaAmigos = new List<Amigo>();
+        private List<Amigo> listaAmigos = new List<Amigo>();
 
         public string CadastrarAmigo(Amigo amigoToAdd)
         {

@@ -11,7 +11,6 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
     public class RepositorioEmprestimo : RepositorioMae
     {
         List<Emprestimo> listaEmprestimos = new List<Emprestimo>();
-
         public string CadastrarEmprestimo(Emprestimo emprestimoToAdd)
         {
             string validacao = emprestimoToAdd.Validar(emprestimoToAdd.amigo, emprestimoToAdd.revista);
