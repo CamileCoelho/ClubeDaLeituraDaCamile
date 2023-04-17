@@ -73,10 +73,9 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         {
                             ImputAmigo(out nome, out nomeResponsavel, out endereco, out numeroParaContato);
                             string validacao = amigoToEdit.Validar(nome, nomeResponsavel, endereco, numeroParaContato);
-
+                            repositorioAmigo.EditarAmigo(amigoToEdit, nome, nomeResponsavel, endereco, numeroParaContato);
                             if (validacao == "REGISTRO_REALIZADO")
-                            {
-
+                            {                                
                                 ExibirMensagem(validacao, ConsoleColor.DarkGreen);
                             }
                             else

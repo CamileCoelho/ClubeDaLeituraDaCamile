@@ -71,6 +71,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         {
                             ImputCaixa(out cor, out etiqueta);
                             string validacaoEdit = caixaToEdit.Validar(cor, etiqueta);
+                            repositorioCaixa.EditarCaixa(caixaToEdit, cor, etiqueta);
                             if (validacaoEdit == "REGISTRO_REALIZADO")
                             {
                                 ExibirMensagem(validacaoEdit, ConsoleColor.DarkGreen);
@@ -91,16 +92,16 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         }
                         string validacaoExclusao = repositorioCaixa.ExcluirCaixa(SelecionarIdCaixa(repositorioCaixa), validador);
 
-                        if (validacaoExclusao == "\n   Caixa excluida com sucesso! ")
+                        if (validacaoExclusao == "\n   Caixa excluida com sucesso!")
                         {
-                            ExibirMensagem(validacaoExclusao, ConsoleColor.DarkRed);
+                            ExibirMensagem(validacaoExclusao, ConsoleColor.DarkGreen);
+                            continue;
                         }
                         else
                         {
-                            ExibirMensagem(validacaoExclusao , ConsoleColor.DarkGreen);
-
+                            ExibirMensagem(validacaoExclusao , ConsoleColor.DarkRed);
+                            continue;
                         }
-
                         continue;
                 }
             } while (continuar) ;

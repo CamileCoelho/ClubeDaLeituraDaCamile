@@ -86,7 +86,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                             if (emprestimo.devolucao == " OK ")
                             {
                                 ExibirMensagem("\n   Nenhum empréstimo em aberto. ", ConsoleColor.DarkRed);
-                                continue;
+                                break;
                             }
                         }
                         MostrarListaEmprestimosEmAberto(repositorioEmprestimo);
@@ -112,9 +112,9 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         Console.WriteLine("\n   Obs.: Os campos de Amigo e Revista não podem ser editados. " +
                             "\n   Caso queira alterá-los, apague esse empréstimo e registre um novo.");
 
-                        string dataInicial2 = RegistrarDataInicial();
-
                         Emprestimo emprestimoToEdit = repositorioEmprestimo.SelecionarEmprestimoPorId(SelecionarIdEmprestimo(repositorioEmprestimo));
+                        
+                        string dataInicial2 = RegistrarDataInicial();
                         
                         if (emprestimoToEdit == null)
                         {
@@ -134,9 +134,9 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         }
                         string validacaoExclusao = repositorioEmprestimo.ExcluirEmprestimo(SelecionarIdEmprestimo(repositorioEmprestimo), validador);
 
-                        if (validacaoExclusao == "\n   Empréstimo excluído com sucesso! ")
+                        if (validacaoExclusao == "\n   Emprestimo excluido com sucesso!")
                         {
-                            ExibirMensagem("\n   Empréstimo excluído com sucesso! ", ConsoleColor.DarkGreen);
+                            ExibirMensagem("\n   Emprestimo excluido com sucesso!", ConsoleColor.DarkGreen);
                         }
                         else
                         {
@@ -154,9 +154,9 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
 
                         string validacaoDevolucao = repositorioEmprestimo.RealizarDevolucao(SelecionarIdEmprestimo(repositorioEmprestimo));
 
-                        if (validacaoDevolucao == "\n   Revista devolvida com sucesso! ")
+                        if (validacaoDevolucao == "\n   Revista devolvida com sucesso!")
                         {
-                            ExibirMensagem("\n   Revista devolvida com sucesso! ", ConsoleColor.DarkGreen);
+                            ExibirMensagem("\n   Revista devolvida com sucesso!", ConsoleColor.DarkGreen);
                         }
                         else
                         {
