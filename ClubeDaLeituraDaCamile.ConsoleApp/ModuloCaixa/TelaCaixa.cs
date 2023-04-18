@@ -30,78 +30,16 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                         Console.ResetColor();
                         break;
                     case "1":
-                        string cor, etiqueta;
-                        ImputCaixa(out cor, out etiqueta);
-
-                        Caixa caixa = new Caixa(cor, etiqueta);
-                        string validacao = repositorioCaixa.CadastrarCaixa(caixa);
-                        if (validacao == "\n   Caixa Cadastrada com sucesso!")
-                        {
-                            ExibirMensagem(validacao, ConsoleColor.DarkGreen);
-                        }
-                        else
-                        {
-                            ExibirMensagem(validacao, ConsoleColor.DarkRed);
-                        }
+                        Cadastrar();
                         continue;
                     case "2":
-                        if (repositorioCaixa.ListarCaixas().Count == 0)
-                        {
-                            ExibirMensagem("\n   Nenhuma caixa cadastrada. " 
-                                "\n   Você deve cadastrar uma caixa para poder visualizar suas caixas cadastradas.", ConsoleColor.DarkRed);
-                            continue;
-                        }
-                        MostarListaCaixas(repositorioCaixa);
-                        Console.ReadLine();
+                        Visualizar();
                         continue;
                     case "3":
-                        if (repositorioCaixa.ListarCaixas().Count == 0)
-                        {
-                            ExibirMensagem("\n   Nenhuma caixa cadastrada. " +
-                                "\n   Você deve cadastrar uma caixa para poder editar o cadastro de uma caixa.", ConsoleColor.DarkRed);
-                            continue;
-                        }
-                        Caixa caixaToEdit = repositorioCaixa.SelecionarCaixaPorId(SelecionarIdCaixa(repositorioCaixa));
-
-                        if (caixaToEdit == null)
-                        {
-                            ExibirMensagem("\n   Caixa não encontrada!", ConsoleColor.DarkRed);
-                        }
-                        else
-                        {
-                            ImputCaixa(out cor, out etiqueta);
-                            string validacaoEdit = caixaToEdit.Validar(cor, etiqueta);
-                            repositorioCaixa.EditarCaixa(caixaToEdit, cor, etiqueta);
-                            if (validacaoEdit == "REGISTRO_REALIZADO")
-                            {
-                                ExibirMensagem(validacaoEdit, ConsoleColor.DarkGreen);
-                            }
-                            else
-                            {
-                                ExibirMensagem(validacaoEdit, ConsoleColor.DarkRed);
-                            }
-
-                        }
+                        Editar();
                         continue;
                     case "4":
-                        if (repositorioCaixa.ListarCaixas().Count == 0)
-                        {
-                            ExibirMensagem("\n   Nenhuma caixa cadastrada. " +
-                                "\n   Você deve cadastrar uma caixa para poder excluir o cadastro de uma caixa.", ConsoleColor.DarkRed);
-                            continue;
-                        }
-                        string validacaoExclusao = repositorioCaixa.ExcluirCaixa(SelecionarIdCaixa(repositorioCaixa), validador);
-
-                        if (validacaoExclusao == "\n   Caixa excluida com sucesso!")
-                        {
-                            ExibirMensagem(validacaoExclusao, ConsoleColor.DarkGreen);
-                            continue;
-                        }
-                        else
-                        {
-                            ExibirMensagem(validacaoExclusao , ConsoleColor.DarkRed);
-                            continue;
-                        }
+                        Excluir();
                         continue;
                 }
             } while (continuar) ;
@@ -137,17 +75,97 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                     }
                 }
                 return opcao;
-            }
+            }                        
+        }
 
-            void ImputCaixa(out string cor, out string etiqueta)
+        private void Cadastrar()
+        {
+            string cor, etiqueta;
+            Imput(out cor, out etiqueta);
+
+            Caixa caixa = new Caixa(cor, etiqueta);
+            string validacao = repositorioCaixa.CadastrarCaixa(caixa);
+            if (validacao == "\n   Caixa Cadastrada com sucesso!")
             {
-                Console.Clear();
-                Console.Write("\n   Digite a cor da caixa que deseja cadastrar: ");
-                cor = Console.ReadLine();
-                Console.Write("\n   Digite a etiqueta para essa caixa: ");
-                etiqueta = Console.ReadLine();
+                ExibirMensagem(validacao, ConsoleColor.DarkGreen);
             }
-                        
+            else
+            {
+                ExibirMensagem(validacao, ConsoleColor.DarkRed);
+            }
+        }
+
+        private void Visualizar()
+        {
+            if (repositorioCaixa.ListarCaixas().Count == 0)
+            {
+                ExibirMensagem("\n   Nenhuma caixa cadastrada. " +
+                    "\n   Você deve cadastrar uma caixa para poder visualizar suas caixas cadastradas.", ConsoleColor.DarkRed);
+                return;
+            }
+            MostarListaCaixas(repositorioCaixa);
+            Console.ReadLine();
+        }
+
+        private void Editar()
+        {
+            if (repositorioCaixa.ListarCaixas().Count == 0)
+            {
+                ExibirMensagem("\n   Nenhuma caixa cadastrada. " +
+                    "\n   Você deve cadastrar uma caixa para poder editar o cadastro de uma caixa.", ConsoleColor.DarkRed);
+                return;
+            }
+            Caixa caixaToEdit = repositorioCaixa.SelecionarCaixaPorId(SelecionarIdCaixa(repositorioCaixa));
+
+            if (caixaToEdit == null)
+            {
+                ExibirMensagem("\n   Caixa não encontrada!", ConsoleColor.DarkRed);
+            }
+            else
+            {
+                string cor, etiqueta;
+                Imput(out cor, out etiqueta);
+                string validacaoEdit = caixaToEdit.Validar(cor, etiqueta);
+                repositorioCaixa.EditarCaixa(caixaToEdit, cor, etiqueta);
+                if (validacaoEdit == "REGISTRO_REALIZADO")
+                {
+                    ExibirMensagem(validacaoEdit, ConsoleColor.DarkGreen);
+                }
+                else
+                {
+                    ExibirMensagem(validacaoEdit, ConsoleColor.DarkRed);
+                }
+
+            }
+        }
+
+        private void Excluir()
+        {
+            if (repositorioCaixa.ListarCaixas().Count == 0)
+            {
+                ExibirMensagem("\n   Nenhuma caixa cadastrada. " +
+                    "\n   Você deve cadastrar uma caixa para poder excluir o cadastro de uma caixa.", ConsoleColor.DarkRed);
+                return;
+            }
+            string validacaoExclusao = repositorioCaixa.ExcluirCaixa(SelecionarIdCaixa(repositorioCaixa), validador);
+
+            if (validacaoExclusao == "\n   Caixa excluida com sucesso!")
+            {
+                ExibirMensagem(validacaoExclusao, ConsoleColor.DarkGreen);
+            }
+            else
+            {
+                ExibirMensagem(validacaoExclusao, ConsoleColor.DarkRed);
+            }
+        }
+
+        public void Imput(out string cor, out string etiqueta)
+        {
+            Console.Clear();
+            Console.Write("\n   Digite a cor da caixa que deseja cadastrar: ");
+            cor = Console.ReadLine();
+            Console.Write("\n   Digite a etiqueta para essa caixa: ");
+            etiqueta = Console.ReadLine();
         }
 
         public int SelecionarIdCaixa(RepositorioCaixa repositorioCaixa)

@@ -1,55 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="ClubeDaLeituraDaCamile.ConsoleApp.Program">
-    <Position X="9.5" Y="0.5" Width="3.25" />
+    <Position X="5" Y="1" Width="3.25" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
-    <NestedTypes>
-      <Class Name="ClubeDaLeituraDaCamile.ConsoleApp.Program.RepositorioAmigo" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ModuloAmigo\RepositorioAmigo.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="ClubeDaLeituraDaCamile.ConsoleApp.Program.TelaAmigo" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ModuloAmigo\TelaAmigo.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="ClubeDaLeituraDaCamile.ConsoleApp.Program.RepositorioCaixa" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ModuloCaixa\RepositorioCaixa.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="ClubeDaLeituraDaCamile.ConsoleApp.Program.TelaCaixa" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ModuloCaixa\TelaCaixa.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="ClubeDaLeituraDaCamile.ConsoleApp.Program.RepositórioEmprestimo" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ModuloEmprestimo\RepositórioEmprestimo.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="ClubeDaLeituraDaCamile.ConsoleApp.Program.TelaEmprestimos" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ModuloEmprestimo\TelaEmprestimos.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="ClubeDaLeituraDaCamile.ConsoleApp.Program.RepositorioRevistas" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ModuloRevista\RepositorioRevistas.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="ClubeDaLeituraDaCamile.ConsoleApp.Program.TelaRrevista" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ModuloRevista\TelaRrevista.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>BAACAAAAAgAAAAAIABAAAAAAAAAAAAAAAYAABAIgQAA=</HashCode>
-      <FileName>ModuloAmigo\RepositorioAmigo.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
