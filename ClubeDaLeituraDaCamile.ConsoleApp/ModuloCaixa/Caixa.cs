@@ -25,12 +25,6 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.ModuloCaixa
             this.etiqueta = etiqueta;
         }
 
-        public void EditarCaixa(string cor, string etiqueta)
-        {
-            this.cor = cor;
-            this.etiqueta = etiqueta;
-        }
-
         public string Validar(string cor, string etiqueta)
         {
             Validador valida = new Validador();

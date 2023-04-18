@@ -40,14 +40,6 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.ModuloEmprestimo
             this.amigo.possuiEmprestimoEmAberto = " SIM ";
         }
 
-        public void EditarEmprestimo(Amigo amigo, Revista revista, string dataInicial)
-        {
-            this.amigo = amigo;
-            this.revista = revista;
-            this.dataInicial = dataInicial;
-            this.devolucao = " PENDENTE ";
-        }
-
         public void EncerrarEmprestimoEAtualizarDados()
         {
             devolucao = " OK ";

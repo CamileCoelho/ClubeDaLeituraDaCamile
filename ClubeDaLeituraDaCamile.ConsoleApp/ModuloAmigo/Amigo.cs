@@ -34,15 +34,6 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.ModuloAmigo
             possuiEmprestimoEmAberto = " NÃO ";
         }
 
-        public void EditarAmigo(string nome, string nomeResponsavel, string endereco, string numeroParaContato, string possuiEmprestimoEmAberto)
-        {
-            this.nome = nome;
-            this.nomeResponsavel = nomeResponsavel;
-            this.endereco = endereco;
-            this.numeroParaContato = numeroParaContato;
-            this.possuiEmprestimoEmAberto = possuiEmprestimoEmAberto;
-        }
-
         public string Validar(string nome, string nomeResponsavel, string endereco, string numeroParaContato)
         {
             Validador valida = new Validador();

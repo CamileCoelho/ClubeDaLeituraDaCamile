@@ -36,16 +36,6 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.ModuloRevista
             this.disponivel = " DISPONÍVEL ";
         }
 
-        public void EditarRevista(string titulo, string tipoColecao, int numeroDaEdicao, int ano, Caixa caixa, string disponivel)
-        {
-            this.titulo = titulo;
-            this.tipoColecao = tipoColecao;
-            this.numeroDaEdicao = numeroDaEdicao;
-            this.ano = ano;
-            this.caixa = caixa;
-            this.disponivel = disponivel;
-        }
-
         public string Validar(string titulo, string tipoColecao, Caixa caixa)
         {
             Validador valida = new Validador();
