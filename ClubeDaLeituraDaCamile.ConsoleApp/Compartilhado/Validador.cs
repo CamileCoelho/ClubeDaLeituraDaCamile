@@ -41,14 +41,6 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.Compartilhado
                 return true;
         }
 
-        // Opitei por usar uma expressão lâmbida ao invez de percorer usando o parão a baixo
-        // foreach(var emprestimo in repositorioEmprestimo.ListarEmprestimos())
-        // {
-        //     if(emprestimo.revista.id == id)
-        //     {
-        //         return "   Esta revista está emprestada. ";
-        //     }
-        // }
         public string PermitirExclusaoDeCaixa(int id)
         {
             if (repositorioRevista.ListarRevistas().Any(x => x.caixa.id == id))

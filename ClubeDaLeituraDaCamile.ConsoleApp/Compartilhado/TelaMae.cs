@@ -9,8 +9,6 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.Compartilhado
 {
     public class TelaMae
     {
-        public Validador validador;
-
         public void ExibirMensagem(string mensagem, ConsoleColor cor)
         {
             Console.ForegroundColor = cor;

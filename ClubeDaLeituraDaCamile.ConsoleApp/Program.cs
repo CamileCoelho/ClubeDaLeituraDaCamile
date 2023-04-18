@@ -9,7 +9,6 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
     {
         static void Main(string[] args)
         {
-
             RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
             RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
             RepositorioRevista repositorioRevista = new RepositorioRevista();
@@ -48,7 +47,6 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                     case "4":
                         telaEmprestimo.VisualizarTela();
                         break;
-
                 }
 
             } while (continuar);

@@ -63,12 +63,10 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
                     case "7":
                         VisualizarDoMes();
                         continue;
-
-
                 }
             } while (continuar);
 
-        string MostrarMenuEmprestimo()
+            string MostrarMenuEmprestimo()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Clear();
@@ -110,7 +108,6 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp
             }
             return opcao;
         }
-
         }
 
         private void VisualizarDoMes()
