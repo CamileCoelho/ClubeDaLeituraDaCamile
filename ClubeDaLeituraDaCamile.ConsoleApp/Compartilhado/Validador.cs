@@ -44,7 +44,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.Compartilhado
         public string PermitirExclusaoDeCaixa(int id)
         {
             if (repositorioRevista.ListarRevistas().Any(x => x.caixa.id == id))
-                return "   Esta caixa possuí uma revista dentro. ";
+                return " Esta caixa possuí uma revista dentro. ";
             else
                 return "SUCESSO!";
         }
@@ -52,7 +52,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.Compartilhado
         public string PermitirExclusaoDeRevista(int id)
         {
             if (repositorioEmprestimo.ListarEmprestimos().Any(x => x.revista.id == id))
-                return "   Esta revista está emprestada. ";
+                return " Esta revista está emprestada. ";
             else
                 return "SUCESSO!";
         }
@@ -60,15 +60,7 @@ namespace ClubeDaLeituraDaCamile.ConsoleApp.Compartilhado
         public string PermitirExclusaoDeAmigo(int id)
         {
             if (repositorioEmprestimo.ListarEmprestimos().Any(x => x.amigo.id == id))
-                return "   Está caixa possuí uma revista dentro.";
-            else
-                return "SUCESSO!";
-        }
-
-        public string PermitirExclusaoDeEmpretimo(int id)
-        {
-            if (repositorioEmprestimo.SelecionarEmprestimoPorId(id).devolucao == " PENDENTE ")
-                return "   Está caixa possuí uma revista dentro.";
+                return " Está caixa possuí uma revista dentro.";
             else
                 return "SUCESSO!";
         }
